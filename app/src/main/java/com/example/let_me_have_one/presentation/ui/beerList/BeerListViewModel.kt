@@ -44,8 +44,9 @@ private val Repository :BeerRepository
 
             viewModelScope.launch {
                 _loading.value = true
+                Log.d("check","Calling the service get")
                 val result = Repository.get()
-
+                Log.d("check","Got the results ")
                 _loading.value = false
                 _beers.value = result
 
@@ -69,11 +70,11 @@ private val Repository :BeerRepository
         _loading.value = true
 
         CoroutineScope(Dispatchers.IO).launch {
-            Repository.getBeerWithName(name).also{it->
+            Repository.getBeerWithName(name).also{ it->
                 MainScope().launch {
-                    it.let {v->
-                        getBeerByName.value = v
 
+                    it.let { v->
+                        getBeerByName.value= v
                     }
                 }
 
@@ -81,9 +82,13 @@ private val Repository :BeerRepository
         }
         _loading.value = false
 
+
         Log.d("adapter","Exit in viewModel")
 
+
     }
+
+
 
     private fun appendRecipe(recipes: List<BeerModel>){
         val current = ArrayList(this._beers.value) //I can change only the mutable type data not the non mutable live data

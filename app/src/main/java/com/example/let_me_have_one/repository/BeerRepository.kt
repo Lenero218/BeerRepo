@@ -16,7 +16,7 @@ fun getFromDb() : LiveData<List<model>>
 
 fun isEmpty() : LiveData<Int>
 
-fun getBeerWithName(name : String) : List<model>
+fun getBeerWithName(name : String) :List<model>
 
 
 }

@@ -1,5 +1,6 @@
 package com.example.let_me_have_one.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.let_me_have_one.Network.BeersService
 import com.example.let_me_have_one.Network.models.BeerDtoMapper
@@ -20,7 +21,9 @@ class Beer_Repository_Impl @Inject constructor(
     }
 
     override suspend fun get(): List<BeerModel> {
+        Log.d("check","Calling for data")
         val result = beersService.get()
+        Log.d("check","Got result from service now mapping to Domain list and returning")
         return mapper.ToDomainList(result)
     }
 
