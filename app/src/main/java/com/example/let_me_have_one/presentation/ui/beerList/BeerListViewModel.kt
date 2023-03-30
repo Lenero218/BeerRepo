@@ -9,11 +9,7 @@ import com.example.let_me_have_one.Network.models.BeerModel
 import com.example.let_me_have_one.db.model
 import com.example.let_me_have_one.repository.BeerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.internal.notify
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -72,23 +68,22 @@ private val Repository :BeerRepository
         Log.d("adapter","Entered in viewModel")
         _loading.value = true
 
-        Repository.getBeerWithName(name).also{it->
+        CoroutineScope(Dispatchers.IO).launch {
+            Repository.getBeerWithName(name).also{it->
+                MainScope().launch {
+                    it.let {v->
+                        getBeerByName.value = v
 
-            it?.let {
-                getBeerByName.value=it.value
+                    }
+                }
+
             }
-
-
         }
         _loading.value = false
 
-
         Log.d("adapter","Exit in viewModel")
 
-
     }
-
-
 
     private fun appendRecipe(recipes: List<BeerModel>){
         val current = ArrayList(this._beers.value) //I can change only the mutable type data not the non mutable live data

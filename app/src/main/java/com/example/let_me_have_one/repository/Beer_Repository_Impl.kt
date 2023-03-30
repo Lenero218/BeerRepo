@@ -1,7 +1,6 @@
 package com.example.let_me_have_one.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.let_me_have_one.Network.BeersService
 import com.example.let_me_have_one.Network.models.BeerDtoMapper
 import com.example.let_me_have_one.Network.models.BeerModel
@@ -37,7 +36,7 @@ class Beer_Repository_Impl @Inject constructor(
         return beerDao.isEmpty()
     }
 
-    override fun getBeerWithName(name: String): LiveData<List<model>> {
+    override fun getBeerWithName(name: String): List<model> {
         return beerDao.getBeerWithName(name)
     }
 

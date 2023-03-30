@@ -19,6 +19,6 @@ interface Dao  {
     fun isEmpty() : LiveData<Int>
 
     @Query("Select * From cached_table WHERE name = :name ")
-    fun getBeerWithName(name : String) : LiveData<List<model>>
+    fun getBeerWithName(name : String) : List<model>
 
 }

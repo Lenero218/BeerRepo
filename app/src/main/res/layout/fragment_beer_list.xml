@@ -45,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="You want to have beer with? "
+            android:layout_marginLeft="8dp"
             android:textStyle="italic"
             android:textColor="@color/blue"/>
 
