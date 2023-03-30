@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@id/beerList"
+        android:icon="@drawable/home"
+        android:title="Home" />
+    <item
+        android:id="@id/random_Beer_Fragment"
+        android:icon="@drawable/random"
+        android:title="Random" />
+    <item
+        android:id="@id/add_to_Cart_Fragment"
+        android:icon="@drawable/baseline_shopping_cart_24"
+        android:title="Cart" />
+</menu>

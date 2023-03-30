@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".presentation.ui.beerList.BeerList">
+
+        <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_view_background"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@android:color/transparent"
+            app:queryHint="Ask for any beer!"
+            />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+
+    </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You want to have beer with? "
+            android:textStyle="italic"
+            android:textColor="@color/blue"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:scrollbarAlwaysDrawHorizontalTrack="true"
+                android:id="@+id/cgSort"
+                app:singleSelection="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/Chicken"
+                    app:chipBackgroundColor="@color/blue"
+                    android:textColor="@color/white"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chicken"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/Dessert"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dessert"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/loaf"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Loaf"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/ice_cream"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IceCream"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/vegetarian"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vegetarian"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/Burgers"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Burgers"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/Beef"
+                    android:textColor="@color/white"
+                    app:chipBackgroundColor="@color/blue"
+                    android:scrollHorizontally="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Beef"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:textStyle="bold"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_vertical"
+
+            android:visibility="gone"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <include layout="@layout/beer_list_shimmer"/>
+                <include layout="@layout/beer_list_shimmer"/>
+                <include layout="@layout/beer_list_shimmer"/>
+                <include layout="@layout/beer_list_shimmer"/>
+                <include layout="@layout/beer_list_shimmer"/>
+                <include layout="@layout/beer_list_shimmer"/>
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_View"
+            android:clipToPadding="false"
+            tools:listitem="@layout/beer_list_shimmer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+    </LinearLayout>
+</layout>

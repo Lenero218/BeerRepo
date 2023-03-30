@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/beerList">
+
+    <fragment
+        android:id="@+id/add_to_Cart_Fragment"
+        android:name="com.example.let_me_have_one.presentation.ui.Add_to_Cart_Fragment"
+        android:label="Add_to_Cart_Fragment" >
+        <action
+            android:id="@+id/action_add_to_Cart_Fragment_to_payment_Fragment"
+            app:destination="@id/payment_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/payment_Fragment"
+        android:name="com.example.let_me_have_one.presentation.payment.Payment_Fragment"
+        android:label="Payment_Fragment" />
+    <fragment
+        android:id="@+id/random_Beer_Fragment"
+        android:name="com.example.let_me_have_one.presentation.ui.Random_Beer_Fragment"
+        android:label="Random_Beer_Fragment" >
+        <action
+            android:id="@+id/action_random_Beer_Fragment_to_payment_Fragment"
+            app:destination="@id/payment_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/beerList"
+        android:name="com.example.let_me_have_one.presentation.ui.beerList.BeerList"
+        android:label="fragment_add_to__cart_"
+        tools:layout="@layout/fragment_add_to__cart_" >
+        <action
+            android:id="@+id/action_beerList_to_beer_Fragment"
+            app:destination="@id/beer_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/beer_Fragment"
+        android:name="com.example.let_me_have_one.presentation.ui.beers.Beer_Fragment"
+        android:label="Beer_Fragment" >
+        <action
+            android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"
+            app:destination="@id/add_to_Cart_Fragment" />
+    </fragment>
+</navigation>
