@@ -43,5 +43,17 @@ class Beer_Repository_Impl @Inject constructor(
         return beerDao.getBeerWithName(name)
     }
 
+    override suspend fun searchPage(page: Int): List<BeerModel> {
+        Log.d("check","Calling the service class with page no, ${page}")
+        val result = beersService.searchPage(page)
+        Log.d("check","Got result from service class using Page no. ${page}")
+
+        for(i in 0.. result.size-1){
+            Log.d("check","Result got after calling service call after calling Page ${page} ${result[i].name}")
+        }
+
+        return mapper.ToDomainList(result)
+    }
+
 
 }

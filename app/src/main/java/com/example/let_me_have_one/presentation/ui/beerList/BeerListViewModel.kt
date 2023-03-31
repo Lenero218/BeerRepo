@@ -26,8 +26,7 @@ private val Repository :BeerRepository
     val query : LiveData<String> get() = _query
     val _loading : MutableLiveData<Boolean> = MutableLiveData()
     val loading: LiveData<Boolean> get() = _loading
-    val page_: MutableLiveData<Int> = MutableLiveData(1)
-    val page : LiveData<Int> get() = page_
+    var page : Int = 1
 
 
     var resultFromRoom : LiveData<List<model>>? = null
@@ -40,18 +39,19 @@ private val Repository :BeerRepository
 
     fun getFromRetrofit(){
 
+            _loading.value = true
 
+            viewModelScope.launch(Dispatchers.Main) {
 
-            viewModelScope.launch {
-                _loading.value = true
-                Log.d("check","Calling the service get")
-                val result = Repository.get()
+                Log.d("check","Calling the service get with page num ${page}")
+                val result = Repository.searchPage(page)
+                page = page + 1
                 Log.d("check","Got the results ")
-                _loading.value = false
+                delay(3000)
                 _beers.value = result
 
             }
-
+        _loading.value = false
     }
 
     fun getFromRoom(){
@@ -87,6 +87,16 @@ private val Repository :BeerRepository
 
 
     }
+
+//    fun getSearchedPage(){
+//        viewModelScope.launch {
+//            _loading.value = true
+//            val result = Repository.searchPage(page++)
+//
+//            _loading.value = false
+//            _beers.value = result
+//        }
+//    }
 
 
 

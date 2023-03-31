@@ -14,4 +14,9 @@ interface BeersService {
 
     @GET("beers")
     suspend fun get() : List<BeerDTO>
+
+    @GET("beers")
+    suspend fun searchPage(
+        @Query("page")page : Int
+    ) : List<BeerDTO>
 }

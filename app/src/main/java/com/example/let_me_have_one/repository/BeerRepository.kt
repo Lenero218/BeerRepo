@@ -18,5 +18,7 @@ fun isEmpty() : LiveData<Int>
 
 fun getBeerWithName(name : String) :List<model>
 
+suspend fun searchPage(page:Int) : List<BeerModel>
+
 
 }

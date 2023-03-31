@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Query
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -22,6 +24,7 @@ import com.example.let_me_have_one.adapter.beerAdapter
 import com.example.let_me_have_one.databinding.ActivityMainBinding
 import com.example.let_me_have_one.databinding.FragmentBeerListBinding
 import com.example.let_me_have_one.db.model
+import com.example.let_me_have_one.other.Constants.QUERY_PAGE_SIZE
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,12 +80,16 @@ class BeerList : Fragment() {
             //Converting the url to bitmap and passing them to Room object
 
             for (beer in beers) { //Passing the values of Retrofit model(BeerModel) to Roomdb model (model)
+
+                Log.d("insert","Inserting Page : ${viewModel.page}")
+
                 Glide.with(this).asBitmap().load(beer.image_url)
                     .into(object : CustomTarget<Bitmap?>() {
                         override fun onResourceReady(
                             resource: Bitmap,
                             transition: Transition<in Bitmap?>?
                         ) {
+
                             viewModel.insertBeer(
                                 model(
                                     beer.pk,
@@ -95,6 +102,7 @@ class BeerList : Fragment() {
                                     beer.brewers_tips
                                 )
                             )
+                           // viewModel.getFromRoom()
                         }
 
                         override fun onLoadCleared(placeholder: Drawable?) {
@@ -107,16 +115,23 @@ class BeerList : Fragment() {
 
 
         })
-
+            //Original position of getFromRoom()
+        //Change 1 - Get to Search page
+        //Change 2 - Position of Loading data in Room
         viewModel.getFromRoom()
         // Getting the values back from Room
         viewModel.resultFromRoom?.observe(viewLifecycleOwner, { dbBeer ->
 
-            beerAdapter.submitList(dbBeer)
-
-            for (beer in dbBeer) {
-                Log.d("Tag", "onViewCreated fetched data using Room : ${beer.tagLine}")
+            dbBeer?.let{
+                beerAdapter.submitList(it)
+                for (beer in it) {
+                    Log.d("Tag", "onViewCreated fetched data using Room : ${beer.tagLine}")
+                }
             }
+
+
+
+
 
         })
 //
@@ -134,10 +149,11 @@ class BeerList : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     Log.d("adapter", "Adapter called")
-                    viewModel.getBeerByName(query)
+                    val newQuery = "%${query}%"
+                    viewModel.getBeerByName(newQuery)
                     Log.d("adapter", "Get beer by name called")
-
-
+                }else if(query == null){
+                    viewModel.getFromRoom()
                 }
                 return false
             }
@@ -145,7 +161,11 @@ class BeerList : Fragment() {
             override fun onQueryTextChange(newQuery: String?): Boolean {
                 Log.d("adapter", "Adapter called from search view")
                 if (newQuery != null) {
+                    val newQuery = "%${newQuery}%"
                     viewModel.getBeerByName(newQuery)
+
+                }else if(newQuery == null){
+                    viewModel.getFromRoom()
                 }
                 return false
             }
@@ -196,7 +216,52 @@ class BeerList : Fragment() {
         beerAdapter = beerAdapter()
         adapter = beerAdapter
         layoutManager = LinearLayoutManager(requireContext())
+        addOnScrollListener(this@BeerList.scrollListener)
     }
+
+    var isLoading = false
+    var isLastPage = false
+    var isScrolling = false
+
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                isScrolling = true
+            }
+
+        }
+
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
+
+            val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
+
+            val shouldPaginate =
+                isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
+
+            if (shouldPaginate) {
+                viewModel.getFromRetrofit()
+                isScrolling = false
+            }
+
+
+        }
+    }
+
+
 }
 
 
