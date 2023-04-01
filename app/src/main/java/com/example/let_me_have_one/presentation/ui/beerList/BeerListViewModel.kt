@@ -41,7 +41,7 @@ private val Repository :BeerRepository
 
             _loading.value = true
 
-            viewModelScope.launch(Dispatchers.Main) {
+            viewModelScope.launch(Dispatchers.IO) {
 
                 Log.d("check","Calling the service get with page num ${page}")
                 val result = Repository.searchPage(page)

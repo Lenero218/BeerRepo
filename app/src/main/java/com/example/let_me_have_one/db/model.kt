@@ -21,4 +21,4 @@ data class model(
     var food_pairing: List<String>? = null,
     var brewers_tips: String? = null
 
-)
+) : java.io.Serializable

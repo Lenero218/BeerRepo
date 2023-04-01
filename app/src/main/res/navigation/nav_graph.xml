@@ -12,11 +12,18 @@
         <action
             android:id="@+id/action_add_to_Cart_Fragment_to_payment_Fragment"
             app:destination="@id/payment_Fragment" />
+        <argument
+            android:name="cart"
+            app:argType="com.example.let_me_have_one.db.model" />
     </fragment>
     <fragment
         android:id="@+id/payment_Fragment"
         android:name="com.example.let_me_have_one.presentation.payment.Payment_Fragment"
-        android:label="Payment_Fragment" />
+        android:label="Payment_Fragment" >
+        <argument
+            android:name="payment"
+            app:argType="com.example.let_me_have_one.db.model" />
+    </fragment>
     <fragment
         android:id="@+id/random_Beer_Fragment"
         android:name="com.example.let_me_have_one.presentation.ui.Random_Beer_Fragment"
@@ -24,6 +31,9 @@
         <action
             android:id="@+id/action_random_Beer_Fragment_to_payment_Fragment"
             app:destination="@id/payment_Fragment" />
+        <action
+            android:id="@+id/action_random_Beer_Fragment_to_add_to_Cart_Fragment"
+            app:destination="@id/add_to_Cart_Fragment" />
     </fragment>
     <fragment
         android:id="@+id/beerList"
@@ -41,5 +51,11 @@
         <action
             android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"
             app:destination="@id/add_to_Cart_Fragment" />
+        <argument
+            android:name="model"
+            app:argType="com.example.let_me_have_one.db.model" />
+        <action
+            android:id="@+id/action_beer_Fragment_to_payment_Fragment"
+            app:destination="@id/payment_Fragment" />
     </fragment>
 </navigation>

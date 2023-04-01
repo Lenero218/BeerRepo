@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Query
@@ -56,6 +57,17 @@ class BeerList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+        beerAdapter.setOnItemClickListener {
+            val bundle= Bundle().apply{
+                putSerializable("model",it)
+            }
+
+            findNavController().navigate(
+                R.id.action_beerList_to_beer_Fragment,
+                bundle
+            )
+        }
+
 
         viewModel.loading.observe(viewLifecycleOwner, { ltrue ->
             IsShimmerEffectOn(isDisplayed = ltrue)
@@ -149,7 +161,7 @@ class BeerList : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     Log.d("adapter", "Adapter called")
-                    val newQuery = "%${query}%"
+                    val newQuery = "${query}%"
                     viewModel.getBeerByName(newQuery)
                     Log.d("adapter", "Get beer by name called")
                 }else if(query == null){
@@ -159,14 +171,14 @@ class BeerList : Fragment() {
             }
 
             override fun onQueryTextChange(newQuery: String?): Boolean {
-                Log.d("adapter", "Adapter called from search view")
-                if (newQuery != null) {
-                    val newQuery = "%${newQuery}%"
-                    viewModel.getBeerByName(newQuery)
-
-                }else if(newQuery == null){
-                    viewModel.getFromRoom()
-                }
+//                Log.d("adapter", "Adapter called from search view")
+//                if (newQuery != null) {
+//                    val newQuery = "%${newQuery}%"
+//                    viewModel.getBeerByName(newQuery)
+//
+//                }else if(newQuery == null){
+//                    viewModel.getFromRoom()
+//                }
                 return false
             }
 
@@ -217,6 +229,8 @@ class BeerList : Fragment() {
         adapter = beerAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addOnScrollListener(this@BeerList.scrollListener)
+
+
     }
 
     var isLoading = false

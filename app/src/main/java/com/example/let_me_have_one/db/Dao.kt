@@ -12,13 +12,13 @@ interface Dao  {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBeer(beer : model)
 
-    @Query("Select * From cached_table ORDER BY id ASC")
+    @Query("Select DISTINCT * From cached_table ORDER BY id ASC")
     fun getAllBeer() : LiveData<List<model>>
     
     @Query("Select count(*) from cached_table")
     fun isEmpty() : LiveData<Int>
 
-    @Query("Select * From cached_table WHERE name LIKE  :name ")
+    @Query("Select DISTINCT * From cached_table WHERE name LIKE  :name ")
     fun getBeerWithName(name : String) : List<model>
 
 }

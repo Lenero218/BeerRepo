@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
 import com.example.let_me_have_one.databinding.CardViewBinding
 import com.example.let_me_have_one.db.model
 
@@ -43,10 +44,28 @@ class beerAdapter : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
 
         val model = differ.currentList[position]
         holder.itemView.apply {
-                binding.beerImage.setImageBitmap(model.image)
+
+            Glide.with(this)
+                .load(model.image)
+                .dontTransform()
+                .into(binding.beerImage)
+
+           // binding.beerImage.setImageBitmap(model.image)
                 binding.tagLine.setText(model.tagLine)
                 binding.title.setText(model.name)
+
+            setOnClickListener{
+                onItemClickListener?.let{
+                    it(model)
+                }
+            }
         }
 
+    }
+
+    private var onItemClickListener : ((model) -> Unit)? = null
+
+    fun setOnItemClickListener(listener : (model)->Unit){
+        onItemClickListener = listener
     }
 }
