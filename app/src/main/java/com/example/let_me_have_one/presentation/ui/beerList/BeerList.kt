@@ -1,7 +1,10 @@
 package com.example.let_me_have_one.presentation.ui.beerList
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
+import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,23 +12,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Query
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
+import com.example.let_me_have_one.Network.LiveDataInternetConnection
 import com.example.let_me_have_one.R
 import com.example.let_me_have_one.adapter.beerAdapter
-import com.example.let_me_have_one.databinding.ActivityMainBinding
 import com.example.let_me_have_one.databinding.FragmentBeerListBinding
-import com.example.let_me_have_one.db.model
 import com.example.let_me_have_one.other.Constants.QUERY_PAGE_SIZE
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,6 +33,8 @@ class BeerList : Fragment() {
     lateinit var binding: FragmentBeerListBinding
     val viewModel: BeerListViewModel by viewModels()
     private lateinit var beerAdapter: beerAdapter
+    private lateinit var cld : LiveDataInternetConnection
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,7 @@ class BeerList : Fragment() {
         setupRecyclerView()
         beerAdapter.setOnItemClickListener {
             val bundle= Bundle().apply{
-                putSerializable("model",it)
+                putSerializable("beerModelFromRetro",it)
             }
 
             findNavController().navigate(
@@ -67,63 +68,81 @@ class BeerList : Fragment() {
                 bundle
             )
         }
+        cld = activity?.let { LiveDataInternetConnection(it.application) }!!
+        cld.observe(viewLifecycleOwner,{isConnected->
+            if(isConnected){
+                val snackbar = Snackbar.make(view,"Connected Succesfully",Snackbar.LENGTH_SHORT)
+                val snackBarView = snackbar.view
+                snackBarView.setBackgroundColor(Color.DKGRAY)
+                snackbar.show()
+
+                viewModel.getFromRetrofit()
+            }else{
+                val snackbar = Snackbar.make(view,"No Internet Connection",Snackbar.LENGTH_INDEFINITE).setAction("Go Offline",{
+                    findNavController().navigate(R.id.action_beerList_to_favoriteBeer)
+                })
+
+                val snackBarView = snackbar.view
+                snackBarView.setBackgroundColor(Color.DKGRAY)
+                snackbar.show()
+
+            }
+        })
+
+
+
 
 
         viewModel.loading.observe(viewLifecycleOwner, { ltrue ->
             IsShimmerEffectOn(isDisplayed = ltrue)
         })
-//
-        viewModel.NoOfItems.observe(viewLifecycleOwner, { count ->
-            if (count == 0) {
-                viewModel.getFromRetrofit()
-            }
 
-
-        })
-//
-//
-//
-//
         viewModel.beers.observe(viewLifecycleOwner, { beers ->
             for (beer in beers) {
                 Log.d("Tag", "onViewCreated using Retrofit call: ${beer.name}")
             }
 
+            val result = beers
+
+            beerAdapter.submitList(result)
+
             //Converting the url to bitmap and passing them to Room object
 
-            for (beer in beers) { //Passing the values of Retrofit model(BeerModel) to Roomdb model (model)
-
-                Log.d("insert","Inserting Page : ${viewModel.page}")
-
-                Glide.with(this).asBitmap().load(beer.image_url)
-                    .into(object : CustomTarget<Bitmap?>() {
-                        override fun onResourceReady(
-                            resource: Bitmap,
-                            transition: Transition<in Bitmap?>?
-                        ) {
-
-                            viewModel.insertBeer(
-                                model(
-                                    beer.pk,
-                                    resource,
-                                    beer.name,
-                                    beer.tagline,
-                                    beer.abv,
-                                    beer.description,
-                                    beer.food_pairing,
-                                    beer.brewers_tips
-                                )
-                            )
-                           // viewModel.getFromRoom()
-                        }
-
-                        override fun onLoadCleared(placeholder: Drawable?) {
-                            //
-                        }
 
 
-                    })
-            }
+//            for (beer in beers) { //Passing the values of Retrofit model(BeerModel) to Roomdb model (model)
+//
+//                Log.d("insert","Inserting Page : ${viewModel.page}")
+//
+//                Glide.with(this).asBitmap().load(beer.image_url)
+//                    .into(object : CustomTarget<Bitmap?>() {
+//                        override fun onResourceReady(
+//                            resource: Bitmap,
+//                            transition: Transition<in Bitmap?>?
+//                        ) {
+//
+//                            viewModel.insertBeer(
+//                                model(
+//                                    beer.pk,
+//                                    resource,
+//                                    beer.name,
+//                                    beer.tagline,
+//                                    beer.abv,
+//                                    beer.description,
+//                                    beer.food_pairing,
+//                                    beer.brewers_tips
+//                                )
+//                            )
+//                           // viewModel.getFromRoom()
+//                        }
+//
+//                        override fun onLoadCleared(placeholder: Drawable?) {
+//                            //
+//                        }
+//
+//
+//                    })
+//            }
 
 
         })
@@ -135,7 +154,7 @@ class BeerList : Fragment() {
         viewModel.resultFromRoom?.observe(viewLifecycleOwner, { dbBeer ->
 
             dbBeer?.let{
-                beerAdapter.submitList(it)
+               // beerAdapter.submitList(it)
                 for (beer in it) {
                     Log.d("Tag", "onViewCreated fetched data using Room : ${beer.tagLine}")
                 }
@@ -152,7 +171,7 @@ class BeerList : Fragment() {
 
             //Bu Log.d("adapter","Size of the fetched list is ${it.size}")
 
-            beerAdapter.submitList(it)
+           // beerAdapter.submitList(it)
         })
 
 
@@ -205,6 +224,8 @@ class BeerList : Fragment() {
 
 
     }
+
+
 
     private fun IsShimmerEffectOn(isDisplayed: Boolean) {
         if (isDisplayed) {
@@ -275,7 +296,46 @@ class BeerList : Fragment() {
         }
     }
 
+    private fun checkForInternet(context: Context): Boolean {
 
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
 }
+
+
 
 

@@ -3,7 +3,7 @@ package com.example.let_me_have_one.Network.models
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-@Parcelize
+
 data class BeerModel(
 
     val pk : Int? = null,
@@ -28,4 +28,4 @@ data class BeerModel(
 
 
     val brewers_tips : String? = null
-) : Parcelable
+) : java.io.Serializable

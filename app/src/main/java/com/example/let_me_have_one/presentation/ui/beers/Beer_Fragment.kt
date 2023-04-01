@@ -8,18 +8,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 
 import com.example.let_me_have_one.databinding.FragmentBeerBinding
+import com.example.let_me_have_one.db.model
 
 
 class Beer_Fragment : Fragment() {
 
     lateinit var binding : FragmentBeerBinding
     val args :Beer_FragmentArgs by navArgs()
+    //val argsFromRetrofit : Beer_FragmentArgs by navArgs()
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +44,25 @@ class Beer_Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model = args.model
+        val modelRetro = args.beerModelFromRetro
 
         binding.apply {
-            beerImage.setImageBitmap(model.image)
-           // description.setText(model.description)
-            title.setText(model.name)
-            tagline.setText(model.tagLine)
-        }
+            Glide.with(this@Beer_Fragment)
+                .load(modelRetro.image_url)
+                .into(beerImage)
 
+
+            title.setText(modelRetro.name)
+            tagline.setText(modelRetro.tagline)
+        }
+//        val modelRetrofit = argsFromRetrofit
+
+//        binding.apply {
+//            beerImage.setImageBitmap(modelRoom.image)
+//           // description.setText(model.description)
+//            title.setText(modelRoom.name)
+//            tagline.setText(modelRoom.tagLine)
+//        }
 
 
          binding.addToCart.setOnClickListener{
@@ -66,13 +83,13 @@ class Beer_Fragment : Fragment() {
         binding.description.setOnClickListener( {
             AlertDialog.Builder(activity)
                 .setMessage(
-                    model.description
+                    modelRetro.description
                 )
                 .setPositiveButton(
                     "OK",
                     DialogInterface.OnClickListener { dialog, which -> dialog.cancel() }).show()
             false
-        })
+      })
 
     }
 

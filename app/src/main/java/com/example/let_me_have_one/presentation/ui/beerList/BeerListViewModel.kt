@@ -44,13 +44,26 @@ private val Repository :BeerRepository
             viewModelScope.launch(Dispatchers.IO) {
 
                 Log.d("check","Calling the service get with page num ${page}")
-                val result = Repository.searchPage(page)
+                 Repository.searchPage(page).also {
+                     MainScope().launch {
+                         it.let{
+                             Log.d("check","Append beer called")
+                             appendBeers(it,page)
+                         }
+                     }
+                 }
+
+
+
                 page = page + 1
                 Log.d("check","Got the results ")
-                delay(3000)
-                _beers.value = result
+                delay(1000)
+
+
+
 
             }
+
         _loading.value = false
     }
 
@@ -100,10 +113,40 @@ private val Repository :BeerRepository
 
 
 
-    private fun appendRecipe(recipes: List<BeerModel>){
-        val current = ArrayList(this._beers.value) //I can change only the mutable type data not the non mutable live data
-        current.addAll(recipes)
-        this._beers.value = current
+    private fun appendBeers(recipes: List<BeerModel>,page:Int){
+        var current : ArrayList<BeerModel>? = ArrayList(emptyList())
+
+        Log.d("check","Entered into append Beers with recipe size: ${recipes.size}")
+
+        if(page > 2){
+
+            _beers?.let{
+                Log.d("check","Added paginated list")
+                current = ArrayList(this._beers.value)
+            }
+
+        }
+         //I can change only the mutable type data not the non mutable live data
+
+        recipes?.let{
+            Log.d("check","Trying to append Beers with recipe size: ${recipes.size}")
+            current?.addAll(recipes)
+            Log.d("check","Merged list with previous list")
+            Log.d("check","After adding the current list size : ${current?.size}")
+        }
+
+        Log.d("check","List size: ${current?.size}")
+
+        current?.let{
+            Log.d("check","Adding into current recipe")
+            MainScope().launch {
+                _beers.value = it
+            }
+
+
+        }
+
+
     }
 
 

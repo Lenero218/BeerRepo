@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_beerList_to_beer_Fragment"
             app:destination="@id/beer_Fragment" />
+        <action
+            android:id="@+id/action_beerList_to_favoriteBeer"
+            app:destination="@id/favoriteBeer" />
     </fragment>
     <fragment
         android:id="@+id/beer_Fragment"
@@ -51,11 +54,29 @@
         <action
             android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"
             app:destination="@id/add_to_Cart_Fragment" />
-        <argument
-            android:name="model"
-            app:argType="com.example.let_me_have_one.db.model" />
+
         <action
             android:id="@+id/action_beer_Fragment_to_payment_Fragment"
+            app:destination="@id/payment_Fragment" />
+        <argument
+            android:name="beerModelFromRetro"
+            app:argType="com.example.let_me_have_one.Network.models.BeerModel" />
+        <argument
+            android:name="model"
+            app:argType="com.example.let_me_have_one.db.model"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteBeer"
+        android:name="com.example.let_me_have_one.presentation.ui.beers.FavoriteBeer"
+        android:label="fragment_favorite_beer"
+        tools:layout="@layout/fragment_favorite_beer" >
+        <action
+            android:id="@+id/action_favoriteBeer_to_add_to_Cart_Fragment"
+            app:destination="@id/add_to_Cart_Fragment" />
+        <action
+            android:id="@+id/action_favoriteBeer_to_payment_Fragment"
             app:destination="@id/payment_Fragment" />
     </fragment>
 </navigation>

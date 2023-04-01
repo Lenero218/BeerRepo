@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.example.let_me_have_one.Network.models.BeerModel
 import com.example.let_me_have_one.databinding.CardViewBinding
 import com.example.let_me_have_one.db.model
 
@@ -22,13 +23,13 @@ class beerAdapter : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
         return BeerViewHolder(binding)
     }
 
-    val differCallBack = object :DiffUtil.ItemCallback<model>(){
-        override fun areItemsTheSame(oldItem: model, newItem: model): Boolean {
-            return oldItem.id == newItem.id
+    val differCallBack = object :DiffUtil.ItemCallback<BeerModel>(){
+        override fun areItemsTheSame(oldItem: BeerModel, newItem: BeerModel): Boolean {
+            return oldItem.image_url == newItem.image_url
         }
 
-        override fun areContentsTheSame(oldItem: model, newItem: model): Boolean {
-            return oldItem.hashCode()==newItem.hashCode()
+        override fun areContentsTheSame(oldItem: BeerModel, newItem: BeerModel): Boolean {
+            return oldItem==newItem
         }
 
     }
@@ -36,7 +37,11 @@ class beerAdapter : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
     val differ= AsyncListDiffer(this,differCallBack)
 
 
-    fun submitList(list : List<model>) = differ.submitList(list)
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    fun submitList(list : List<BeerModel>) = differ.submitList(list)
 
     override fun getItemCount(): Int = differ.currentList.size
 
@@ -46,12 +51,11 @@ class beerAdapter : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
         holder.itemView.apply {
 
             Glide.with(this)
-                .load(model.image)
-                .dontTransform()
+                .load(model.image_url)
                 .into(binding.beerImage)
 
            // binding.beerImage.setImageBitmap(model.image)
-                binding.tagLine.setText(model.tagLine)
+                binding.tagLine.setText(model.tagline)
                 binding.title.setText(model.name)
 
             setOnClickListener{
@@ -63,9 +67,9 @@ class beerAdapter : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
 
     }
 
-    private var onItemClickListener : ((model) -> Unit)? = null
+    private var onItemClickListener : ((BeerModel) -> Unit)? = null
 
-    fun setOnItemClickListener(listener : (model)->Unit){
+    fun setOnItemClickListener(listener : (BeerModel)->Unit){
         onItemClickListener = listener
     }
 }
