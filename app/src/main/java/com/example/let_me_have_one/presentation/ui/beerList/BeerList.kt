@@ -67,14 +67,23 @@ class BeerList : Fragment() {
                 R.id.action_beerList_to_beer_Fragment,
                 bundle
             )
+
         }
+
+
+        var snackStop : Boolean = false
         cld = activity?.let { LiveDataInternetConnection(it.application) }!!
         cld.observe(viewLifecycleOwner,{isConnected->
             if(isConnected){
-                val snackbar = Snackbar.make(view,"Connected Succesfully",Snackbar.LENGTH_SHORT)
-                val snackBarView = snackbar.view
-                snackBarView.setBackgroundColor(Color.DKGRAY)
-                snackbar.show()
+
+                if(snackStop){
+
+                    val snackbar = Snackbar.make(view,"Connected Succesfully",Snackbar.LENGTH_SHORT)
+                    val snackBarView = snackbar.view
+                    snackBarView.setBackgroundColor(Color.DKGRAY)
+                    snackbar.show()
+                    snackStop = false
+                }
 
                 viewModel.getFromRetrofit()
             }else{
@@ -85,6 +94,8 @@ class BeerList : Fragment() {
                 val snackBarView = snackbar.view
                 snackBarView.setBackgroundColor(Color.DKGRAY)
                 snackbar.show()
+
+                snackStop = true
 
             }
         })
@@ -179,12 +190,11 @@ class BeerList : Fragment() {
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
-                    Log.d("adapter", "Adapter called")
-                    val newQuery = "${query}%"
-                    viewModel.getBeerByName(newQuery)
-                    Log.d("adapter", "Get beer by name called")
+
+                    viewModel.searchWithQuery(query)
+
                 }else if(query == null){
-                    viewModel.getFromRoom()
+                    viewModel.getFromRetrofit()
                 }
                 return false
             }
@@ -246,7 +256,7 @@ class BeerList : Fragment() {
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
-        beerAdapter = beerAdapter()
+        beerAdapter = beerAdapter(viewModel)
         adapter = beerAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addOnScrollListener(this@BeerList.scrollListener)

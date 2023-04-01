@@ -26,6 +26,9 @@ data class BeerModel(
 
     val food_pairing : List<String>? = null,
 
+    var isFavorite : Boolean = false,
 
-    val brewers_tips : String? = null
+    val brewers_tips : String? = null,
+
+    var amount : Int = 0
 ) : java.io.Serializable

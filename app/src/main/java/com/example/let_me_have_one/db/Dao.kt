@@ -21,4 +21,6 @@ interface Dao  {
     @Query("Select DISTINCT * From cached_table WHERE name LIKE  :name ")
     fun getBeerWithName(name : String) : List<model>
 
+
+
 }

@@ -21,7 +21,8 @@
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
-            android:layout_width="wrap_content"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/search_view_background"
             app:iconifiedByDefault="false"
@@ -29,111 +30,15 @@
             app:queryHint="Ask for any beer!"
             />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
 
-
-        </androidx.appcompat.widget.Toolbar>
 
 
 
     </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="You want to have beer with? "
-            android:textStyle="italic"
-            android:textColor="@color/blue"/>
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
 
-            <com.google.android.material.chip.ChipGroup
-                android:scrollbarAlwaysDrawHorizontalTrack="true"
-                android:id="@+id/cgSort"
-                app:singleSelection="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/Chicken"
-                    app:chipBackgroundColor="@color/blue"
-                    android:textColor="@color/white"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chicken"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/Dessert"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dessert"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/loaf"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Loaf"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/ice_cream"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="IceCream"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/vegetarian"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Vegetarian"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/Burgers"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Burgers"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/Beef"
-                    android:textColor="@color/white"
-                    app:chipBackgroundColor="@color/blue"
-                    android:scrollHorizontally="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Beef"
-                    style="@style/Widget.MaterialComponents.Chip.Filter"
-                    android:textStyle="bold"/>
-
-            </com.google.android.material.chip.ChipGroup>
-
-        </HorizontalScrollView>
 
         <ProgressBar
             android:id="@+id/progressBar"

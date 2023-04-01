@@ -11,6 +11,7 @@ import com.example.let_me_have_one.repository.BeerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 @HiltViewModel
@@ -48,6 +49,11 @@ private val Repository :BeerRepository
                      MainScope().launch {
                          it.let{
                              Log.d("check","Append beer called")
+
+                             for( i in 0..it.size-1){
+                                 it[i].amount = rand(400,1000)
+                             }
+
                              appendBeers(it,page)
                          }
                      }
@@ -101,15 +107,23 @@ private val Repository :BeerRepository
 
     }
 
-//    fun getSearchedPage(){
-//        viewModelScope.launch {
-//            _loading.value = true
-//            val result = Repository.searchPage(page++)
-//
-//            _loading.value = false
-//            _beers.value = result
-//        }
-//    }
+    fun searchWithQuery(name : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            Repository.search(name).also {it->
+               MainScope().launch {
+
+                   for( i in 0..it.size-1){
+                       it[i].amount = rand(400,1000)
+                   }
+
+                   it.let{v->
+                       _beers.value = v
+
+                   }
+               }
+            }
+        }
+    }
 
 
 
@@ -155,7 +169,12 @@ private val Repository :BeerRepository
         Repository.insertIntoRoom(beer)
     }
 
+    fun rand(start: Int, end: Int): Int {
 
+        require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
+        return Random(System.nanoTime()).nextInt(end - start + 1) + start
+
+    }
 
 
 

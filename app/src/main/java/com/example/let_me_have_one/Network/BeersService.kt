@@ -7,9 +7,9 @@ import retrofit2.http.Query
 interface BeersService {
 
 
-    @GET("beers?beer_name=")
+    @GET("beers")
     suspend fun search(
-        @Query("query")query : String
+        @Query("beer_name")query : String
     ) : List<BeerDTO>
 
     @GET("beers")

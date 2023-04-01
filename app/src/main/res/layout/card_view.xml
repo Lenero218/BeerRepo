@@ -9,105 +9,140 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+
             app:cardElevation="2dp"
             app:cardCornerRadius="20dp"
             app:cardUseCompatPadding="true">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/beer_image"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="53dp"
-                    android:layout_marginBottom="10dp"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/beer_image"
+                        android:layout_width="match_parent"
+                        android:padding="20dp"
+                        android:layout_height="232dp"
+                        android:src="@drawable/ic_launcher_background"
+                        ></ImageView>
+
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="2">
 
                 <TextView
                     android:id="@+id/title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="center"
-                    android:text="Sample Card title"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/beer_image"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.163" />
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
 
+                    android:layout_weight="1"
+                    android:text="Title"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="22dp"
+                    android:gravity="center"/>
                 <TextView
                     android:id="@+id/tagLine"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="8dp"
-                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:text="Tagline"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toTopOf="@+id/try_Now"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/beer_image"
-                    app:layout_constraintTop_toBottomOf="@+id/title"
-                    app:layout_constraintVertical_bias="0.5" />
+                    android:textSize="20dp"
+                    android:gravity="center|top"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:layout_margin="9dp"
+
+                    android:layout_marginBottom="2dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:text="Rs."
+                            android:textSize="24dp"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"/>
+
+                        <TextView
+                            android:id="@+id/amount"
+                            android:textSize="24dp"
+                            android:textColor="@color/black"
+                            android:text="450"
+                            android:gravity="center|start"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4">
+
+                        </TextView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_weight="1">
 
 
-                <ImageButton
-                    android:id="@+id/favorite"
-                    android:layout_width="45dp"
-                    android:layout_height="35dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@color/white"
-                    android:src="@drawable/baseline_favorite_border_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/try_Now"
-                    app:layout_constraintTop_toBottomOf="@+id/title"
-                    app:layout_constraintVertical_bias="0.753" />
+                        <ImageView
+                            android:id="@+id/favorite"
+                            android:layout_width="66dp"
+                            android:layout_height="40dp"
+                            android:layout_gravity="center"
+                            android:tag="border_fav"
+                            android:layout_marginRight="18dp"
+                            android:background="@color/white"
+                            android:src="@drawable/baseline_favorite_border_24" />
 
-                <Button
-                    android:id="@+id/try_Now"
-                    android:layout_width="87dp"
-                    android:layout_height="42dp"
-                    android:layout_marginBottom="23dp"
-                    android:text="Try Now!"
-                    android:textSize="9dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/favorite"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintHorizontal_chainStyle="spread"
-                    app:layout_constraintStart_toEndOf="@+id/beer_image" />
+                    </LinearLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
