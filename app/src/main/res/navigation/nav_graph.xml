@@ -7,26 +7,26 @@
 
     <fragment
         android:id="@+id/add_to_Cart_Fragment"
-        android:name="com.example.let_me_have_one.presentation.ui.Add_to_Cart_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.Add_to_Cart_Fragment"
         android:label="Add_to_Cart_Fragment" >
         <action
             android:id="@+id/action_add_to_Cart_Fragment_to_payment_Fragment"
             app:destination="@id/payment_Fragment" />
         <argument
-            android:name="cart"
-            app:argType="com.example.let_me_have_one.db.model" />
+            android:name="model"
+            app:argType="com.example.let_me_have_one.Beers.db.model" />
     </fragment>
     <fragment
         android:id="@+id/payment_Fragment"
-        android:name="com.example.let_me_have_one.presentation.payment.Payment_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.payment.Payment_Fragment"
         android:label="Payment_Fragment" >
         <argument
             android:name="payment"
-            app:argType="com.example.let_me_have_one.db.model" />
+            app:argType="com.example.let_me_have_one.Beers.db.model" />
     </fragment>
     <fragment
         android:id="@+id/random_Beer_Fragment"
-        android:name="com.example.let_me_have_one.presentation.ui.Random_Beer_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.Random_Beer_Fragment"
         android:label="Random_Beer_Fragment" >
         <action
             android:id="@+id/action_random_Beer_Fragment_to_payment_Fragment"
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/beerList"
-        android:name="com.example.let_me_have_one.presentation.ui.beerList.BeerList"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.beerList.BeerList"
         android:label="fragment_add_to__cart_"
         tools:layout="@layout/fragment_add_to__cart_" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/beer_Fragment"
-        android:name="com.example.let_me_have_one.presentation.ui.beers.Beer_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.beers.randomBeer.Beer_Fragment"
         android:label="Beer_Fragment" >
         <action
             android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"
@@ -59,17 +59,17 @@
             android:id="@+id/action_beer_Fragment_to_payment_Fragment"
             app:destination="@id/payment_Fragment" />
         <argument
-            android:name="beerModelFromRetro"
-            app:argType="com.example.let_me_have_one.Network.models.BeerModel" />
-        <argument
             android:name="model"
-            app:argType="com.example.let_me_have_one.db.model"
+            app:argType="com.example.let_me_have_one.Beers.db.model"
             app:nullable="true"
             android:defaultValue="@null"/>
+        <argument
+            android:name="beerModelFromRetro"
+            app:argType="com.example.let_me_have_one.Beers.Network.models.BeerModel" />
     </fragment>
     <fragment
         android:id="@+id/favoriteBeer"
-        android:name="com.example.let_me_have_one.presentation.ui.beers.FavoriteBeer"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.beers.FavoriteBeer"
         android:label="fragment_favorite_beer"
         tools:layout="@layout/fragment_favorite_beer" >
         <action
