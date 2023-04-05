@@ -21,5 +21,13 @@ fun getBeerWithName(name : String) :List<model>
 
 suspend fun searchPage(page:Int) : List<BeerModel>
 
+suspend fun getAllBeerForCart(bool:Boolean) : List<model>
+
+suspend fun getAllBeerForFavorite(bool:Boolean) : List<model>
+
+suspend fun getAllBeerForFood(name:String) : List<BeerModel>
+
+suspend fun getLightBeer(min:Int, max : Int) : List<BeerModel>
+
 
 }

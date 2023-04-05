@@ -29,6 +29,18 @@ data class model(
     var addToCart:Boolean,
 
     @ColumnInfo(name="favorite", defaultValue = "false")
-    var favorite : Boolean
+    var favorite : Boolean,
+
+    @ColumnInfo(name="rating",defaultValue = "0.0")
+    var rating : Double,
+
+    @ColumnInfo(name = "currentOffer", defaultValue = "0")
+    var currentOffer:Int,
+
+    @ColumnInfo(name="finalAmount",defaultValue="0")
+    var finalAmount:Int,
+
+    @ColumnInfo(name="no_of_reviews",defaultValue="0")
+    var no_of_reviews:Int
 
 ) : java.io.Serializable

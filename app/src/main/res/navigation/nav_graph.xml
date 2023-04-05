@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/random_Beer_Fragment"
-        android:name="com.example.let_me_have_one.Beers.presentation.ui.Random_Beer_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.beers.randomBeer.Random_Beer_Fragment"
         android:label="Random_Beer_Fragment" >
         <action
             android:id="@+id/action_random_Beer_Fragment_to_payment_Fragment"
@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_random_Beer_Fragment_to_add_to_Cart_Fragment"
             app:destination="@id/add_to_Cart_Fragment" />
+        <action
+            android:id="@+id/action_random_Beer_Fragment_to_favoriteBeer"
+            app:destination="@id/favoriteBeer" />
     </fragment>
     <fragment
         android:id="@+id/beerList"
@@ -49,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/beer_Fragment"
-        android:name="com.example.let_me_have_one.Beers.presentation.ui.beers.randomBeer.Beer_Fragment"
+        android:name="com.example.let_me_have_one.Beers.presentation.ui.beers.Beer_Fragment"
         android:label="Beer_Fragment" >
         <action
             android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"

@@ -1,4 +1,4 @@
-package com.example.let_me_have_one.Beers.presentation.ui.beers.randomBeer
+package com.example.let_me_have_one.Beers.presentation.ui.beers
 
 
 import android.app.AlertDialog
@@ -16,18 +16,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.example.let_me_have_one.Beers.adapter.recomendationListAdapter
 import com.example.let_me_have_one.R
 
 import com.example.let_me_have_one.databinding.FragmentBeerBinding
 import com.example.let_me_have_one.Beers.db.model
-import com.example.let_me_have_one.Beers.presentation.ui.beerList.BeerListViewModel
+import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
 
 
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.random.Random
 
 
 @AndroidEntryPoint
@@ -36,7 +38,8 @@ class Beer_Fragment : Fragment() {
     val viewModel: BeerListViewModel by viewModels()
     lateinit var binding : FragmentBeerBinding
     val args : Beer_FragmentArgs by navArgs()
-
+    lateinit var recRv : RecyclerView
+    lateinit var adapter : recomendationListAdapter
 
 
 
@@ -59,9 +62,12 @@ class Beer_Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val modelRetro = args.beerModelFromRetro
 
-        var reviews = rand(22000,100000)
+        setupRecyclerView()
+
+        var amountAfterDiscount = (modelRetro.amount.toDouble() - modelRetro.amount.toDouble() * (modelRetro.currentOffer.toDouble()/100)).toInt()
 
         binding.apply {
             Glide.with(this@Beer_Fragment)
@@ -72,10 +78,21 @@ class Beer_Fragment : Fragment() {
             title.setText(modelRetro.name)
             tagline.setText(modelRetro.tagline)
             amount.setText(modelRetro.amount.toString())
-            noOfReviews.setText(reviews.toString())
+            noOfReviews.setText(modelRetro.no_of_reviews.toString())
+            currentOffer.setText(modelRetro.currentOffer.toString())
+            finalAmount.setText(amountAfterDiscount.toString())
         }
 
+        Log.d("recCheck","Checking the abv value and it is found ${modelRetro.abv} and calling viewModel")
 
+        modelRetro.abv?.let { viewModel.getRecomendedBeers(it.toInt()-1,modelRetro.abv.toInt()+1) }
+
+        Log.d("recCheck","Submitting the list with size ")
+
+        viewModel.getRecomendedBeers.observe(viewLifecycleOwner,{
+            Log.d("recCheck","Submitted the recomendation list")
+            adapter.submitList(it)
+        })
 
          binding.addToCart.setOnClickListener{
             //Write functionality to Add to the cart and then implement the dismiss
@@ -88,7 +105,7 @@ class Beer_Fragment : Fragment() {
                          transition: Transition<in Bitmap?>?
                      ) {
                          viewModel.insertBeer(model(modelRetro.pk,resource,modelRetro.name,modelRetro.tagline,modelRetro.abv,
-                             modelRetro.description,modelRetro.food_pairing,modelRetro.brewers_tips,modelRetro.amount,true,modelRetro.isFavorite))
+                             modelRetro.description,modelRetro.food_pairing,modelRetro.brewers_tips,modelRetro.amount,true,modelRetro.isFavorite,modelRetro.rating,modelRetro.currentOffer,amountAfterDiscount,modelRetro.no_of_reviews))
                          Log.d("favorite","Added to cart into Room db as favorite ")
                      }
 
@@ -100,13 +117,11 @@ class Beer_Fragment : Fragment() {
 
 
             Toast.makeText(it.context,"Added to cart!!",Toast.LENGTH_SHORT).show()
-             findNavController().navigate(com.example.let_me_have_one.R.id.action_beer_Fragment_to_add_to_Cart_Fragment)
+             //findNavController().navigate(com.example.let_me_have_one.R.id.action_beer_Fragment_to_add_to_Cart_Fragment)
         }
 
         binding.buyNow.setOnClickListener{
 
-            //Navigate to the payment page using nav controller and then dismiss
-          //  dismiss()
             findNavController().navigate(com.example.let_me_have_one.R.id.action_beer_Fragment_to_payment_Fragment)
         }
 
@@ -118,16 +133,24 @@ class Beer_Fragment : Fragment() {
                 .setPositiveButton(
                     "OK",
                     DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
+                .setTitle("About me!")
+                .setIcon(R.drawable.beer)
                 .show()
             false
       })
 
-    }
-    fun rand(start: Int, end: Int): Int {
 
-        require(!(start > end || end - start + 1 > Int.MAX_VALUE)) { "Illegal Argument" }
-        return Random(System.nanoTime()).nextInt(end - start + 1) + start
+
+
 
     }
+
+    private fun setupRecyclerView() {
+       recRv = binding.recomendationsRV
+        recRv.layoutManager = LinearLayoutManager(requireContext())
+        adapter = recomendationListAdapter()
+        recRv.adapter = adapter
+    }
+
 
 }

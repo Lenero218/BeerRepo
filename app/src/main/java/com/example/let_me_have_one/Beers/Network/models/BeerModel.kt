@@ -30,5 +30,11 @@ data class BeerModel(
 
     val brewers_tips : String? = null,
 
-    var amount : Int = 0
+    var amount : Int = 0,
+
+    var rating : Double = 0.0,
+
+    var currentOffer : Int = 0,
+
+    var no_of_reviews : Int = 0
 ) : java.io.Serializable

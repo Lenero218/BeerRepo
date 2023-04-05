@@ -1,10 +1,6 @@
 package com.example.let_me_have_one.Beers.presentation.ui.beerList
 
-import android.content.Context
 import android.graphics.Color
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,13 +11,13 @@ import android.widget.AbsListView
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.let_me_have_one.Beers.Network.LiveDataInternetConnection
 import com.example.let_me_have_one.Beers.adapter.beerAdapter
 import com.example.let_me_have_one.Beers.other.Constants.QUERY_PAGE_SIZE
+import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
 
 import com.example.let_me_have_one.R
 
@@ -61,6 +57,7 @@ class BeerList : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
+
         beerAdapter.setOnItemClickListener {
             val bundle= Bundle().apply{
                 putSerializable("beerModelFromRetro",it)
@@ -76,10 +73,13 @@ class BeerList : Fragment() {
 
         var snackStop : Boolean = false
         cld = activity?.let { LiveDataInternetConnection(it.application) }!!
+
         cld.observe(viewLifecycleOwner,{isConnected->
             if(isConnected){
 
                 if(snackStop){
+
+                    viewModel._loading.value = false
 
                     val snackbar = Snackbar.make(view,"Connected Succesfully",Snackbar.LENGTH_SHORT)
                     val snackBarView = snackbar.view
@@ -89,7 +89,11 @@ class BeerList : Fragment() {
                 }
 
                 viewModel.getFromRetrofit()
+
             }else{
+
+                viewModel._loading.value = true
+
                 val snackbar = Snackbar.make(view,"No Internet Connection",Snackbar.LENGTH_INDEFINITE).setAction("Go Offline",{
                     findNavController().navigate(R.id.action_beerList_to_favoriteBeer)
                 })
@@ -120,72 +124,13 @@ class BeerList : Fragment() {
 
             beerAdapter.submitList(result)
 
-            //Converting the url to bitmap and passing them to Room object
-
-
-
-//            for (beer in beers) { //Passing the values of Retrofit model(BeerModel) to Roomdb model (model)
-//
-//                Log.d("insert","Inserting Page : ${viewModel.page}")
-//
-//                Glide.with(this).asBitmap().load(beer.image_url)
-//                    .into(object : CustomTarget<Bitmap?>() {
-//                        override fun onResourceReady(
-//                            resource: Bitmap,
-//                            transition: Transition<in Bitmap?>?
-//                        ) {
-//
-//                            viewModel.insertBeer(
-//                                model(
-//                                    beer.pk,
-//                                    resource,
-//                                    beer.name,
-//                                    beer.tagline,
-//                                    beer.abv,
-//                                    beer.description,
-//                                    beer.food_pairing,
-//                                    beer.brewers_tips
-//                                )
-//                            )
-//                           // viewModel.getFromRoom()
-//                        }
-//
-//                        override fun onLoadCleared(placeholder: Drawable?) {
-//                            //
-//                        }
-//
-//
-//                    })
-//            }
-
-
         })
-            //Original position of getFromRoom()
-        //Change 1 - Get to Search page
-        //Change 2 - Position of Loading data in Room
-        viewModel.getFromRoom()
-        // Getting the values back from Room
-        viewModel.resultFromRoom?.observe(viewLifecycleOwner, { dbBeer ->
 
-            dbBeer?.let{
-               // beerAdapter.submitList(it)
-                for (beer in it) {
-                    Log.d("Tag", "onViewCreated fetched data using Room : ${beer.tagLine}")
-                }
-            }
-
-
-
-
-
-        })
-//
-//
         viewModel.getBeerByName.observe(viewLifecycleOwner, {
 
-            //Bu Log.d("adapter","Size of the fetched list is ${it.size}")
+            // Log.d("adapter","Size of the fetched list is ${it.size}")
 
-           // beerAdapter.submitList(it)
+            //beerAdapter.submitList(it)
         })
 
 
@@ -203,37 +148,19 @@ class BeerList : Fragment() {
             }
 
             override fun onQueryTextChange(newQuery: String?): Boolean {
-//                Log.d("adapter", "Adapter called from search view")
-//                if (newQuery != null) {
-//                    val newQuery = "%${newQuery}%"
-//                    viewModel.getBeerByName(newQuery)
-//
-//                }else if(newQuery == null){
-//                    viewModel.getFromRoom()
-//                }
+                Log.d("adapter", "Adapter called from search view")
+                if (newQuery != null) {
+                    val newQuery = "%${newQuery}%"
+                    viewModel.getBeerByName(newQuery)
+
+                }else if(newQuery == null){
+                    viewModel.getFromRoom()
+                }
                 return false
             }
 
         })
 
-
-
-
-
-
-
-//
-//    fun CircularIndeterminateProgressBarDisplayed(isDisplay: Boolean) {
-//        val progressBar : ProgressBar = binding.progressBar
-//
-//        if (isDisplay == true){
-//            progressBar.visibility = View.VISIBLE
-//        }
-//        else if(isDisplay == false) {
-//            progressBar.visibility = View.GONE
-//        }
-//    }
-//
 
 
     }
@@ -259,7 +186,7 @@ class BeerList : Fragment() {
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
-        beerAdapter = beerAdapter(viewModel)
+        beerAdapter = activity?.let { beerAdapter(viewModel, it) }!!
         adapter = beerAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addOnScrollListener(this@BeerList.scrollListener)

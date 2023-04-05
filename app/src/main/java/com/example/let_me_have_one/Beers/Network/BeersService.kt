@@ -20,4 +20,22 @@ interface BeersService {
     suspend fun searchPage(
         @Query("page")page : Int
     ) : List<BeerDTO>
+
+    //Get data for food
+
+    @GET("beers")
+    suspend fun searchBeerForFood(
+        @Query("food") food : String
+    ) : List<BeerDTO>
+
+    @GET("beers")
+    suspend fun searchAccToAlcoholABV(
+
+        @Query("abv_gt") low : Int,
+        @Query("abv_it") high : Int
+
+    ) : List<BeerDTO>
+
+
+
 }

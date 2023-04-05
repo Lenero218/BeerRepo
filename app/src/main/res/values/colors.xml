@@ -10,4 +10,17 @@
     <color name="blue">#009bdc</color>
     <color name="grey">#a3a4a7</color>
     <color name="darkBlue">#047DDD</color>
+
+    <color name="colorPrimary">#536DFE</color>
+    <color name="colorPrimaryDark">#536DFE</color>
+    <color name="colorAccent">#F44366</color>
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#757575</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="orange">#FF9800</color>
+    <color name="darkorange">#FF9800</color>
+    <color name="red">#E62828</color>
+    <color name = "defaultaback">#f4f1f1</color>
+    <color name="cardViewBack">#ffffff</color>
 </resources>

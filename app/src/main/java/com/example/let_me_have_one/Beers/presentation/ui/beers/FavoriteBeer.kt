@@ -1,14 +1,29 @@
 package com.example.let_me_have_one.Beers.presentation.ui.beers
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.let_me_have_one.Beers.adapter.favoriteAdapter
+import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
 import com.example.let_me_have_one.R
+import com.example.let_me_have_one.databinding.FragmentFavoriteBeerBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class FavoriteBeer : Fragment() {
+
+    val viewModel: BeerListViewModel by viewModels()
+    private lateinit var favBeerAdapter: favoriteAdapter
+    lateinit var binding : FragmentFavoriteBeerBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +35,76 @@ class FavoriteBeer : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite_beer, container, false)
+
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_favorite_beer,container,false)
+
+        return binding.root
+
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupRecyclerView()
+
+       viewModel.getAllForFavorite(true)
+
+        viewModel.getBeerByName.observe(viewLifecycleOwner,{
+
+
+            favBeerAdapter.submitList(it)
+
+        })
+
+        viewModel.getBeerForFavorite.observe(viewLifecycleOwner,{
+            //provide value to the adapter
+            favBeerAdapter.submitList(it)
+            binding.favoriteBeerRecyclerView.adapter?.notifyDataSetChanged()
+        })
+
+
+        binding.favSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    val newQuery = "%${query}%"
+                    viewModel.getBeerByName(newQuery)
+
+
+                }else if(query == null){
+                    viewModel.getAllForFavorite(true)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newQuery: String?): Boolean {
+                Log.d("adapter", "Adapter called from search view")
+                if (newQuery != null) {
+                    val newQuery = "%${newQuery}%"
+                    viewModel.getBeerByName(newQuery)
+
+                }else if(newQuery == null){
+                    viewModel.getAllForFavorite(true)
+                }
+                return false
+            }
+
+        })
+
+
+    }
+
+
+
+
+
+    private fun setupRecyclerView() {
+        binding.favoriteBeerRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            favBeerAdapter = favoriteAdapter()
+            adapter = favBeerAdapter
+        }
     }
 
 

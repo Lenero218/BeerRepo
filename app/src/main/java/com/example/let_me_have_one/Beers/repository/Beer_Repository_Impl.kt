@@ -56,5 +56,31 @@ class Beer_Repository_Impl @Inject constructor(
         return mapper.ToDomainList(result)
     }
 
+    override suspend fun getAllBeerForCart(bool: Boolean): List<model> {
+        return beerDao.getAllBeerUsingCheck(bool)
+    }
+
+    override suspend fun getAllBeerForFavorite(bool: Boolean): List<model> {
+        return beerDao.getAllBeerForFavorite(bool)
+    }
+
+    override suspend fun getAllBeerForFood(name: String): List<BeerModel> {
+        Log.d("nakli","calling the service for results")
+        val result = beersService.searchBeerForFood(name)
+        Log.d("nakli","Got the results with leng : ${result}")
+        return mapper.ToDomainList(result)
+    }
+
+
+
+    override suspend fun getLightBeer(min: Int, max : Int): List<BeerModel> {
+
+        Log.d("recCheck","Entered for getting the recomendation list")
+        val result = beersService.searchAccToAlcoholABV(min,max)
+
+        Log.d("recCheck","Got the recomendation list with size ${result.size}")
+        return mapper.ToDomainList(result)
+    }
+
 
 }
