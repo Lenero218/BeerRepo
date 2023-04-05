@@ -1,6 +1,11 @@
 package com.example.let_me_have_one.Beers.presentation.ui.beers.randomBeer
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -83,11 +88,25 @@ class Random_Beer_Fragment : Fragment() {
         var snackStop  = false
 
 
+        val isConnected = checkForInternet(requireContext())
+
+        if(isConnected){
+
+            viewModel._loading.value = false
+
+            viewModel.getLightBeers()
+
+            viewModel.getMediumBeers()
+
+            viewModel.getStrongBeers()
+
+        }
+
 
         cld = activity?.let { LiveDataInternetConnection(it.application) }!!
         cld.observe(viewLifecycleOwner,{isConnected->
             if(isConnected){
-                binding.searchFoodtv.visibility = View.VISIBLE
+
                 if(snackStop){
 
 
@@ -113,7 +132,7 @@ class Random_Beer_Fragment : Fragment() {
                  //   findNavController().navigate(R.id.action_random_Beer_Fragment_to_favoriteBeer)
                 })
 
-                binding.searchFoodtv.visibility = View.INVISIBLE
+
 
                 val snackBarView = snackbar.view
                 snackBarView.setBackgroundColor(Color.DKGRAY)
@@ -124,15 +143,14 @@ class Random_Beer_Fragment : Fragment() {
             }
         })
 
+
+
         viewModel.loading.observe(viewLifecycleOwner,{
                 IsShimmerEffectOn(it)
         })
 
 
 
-//        viewModel.getMediumBeers()
-//        viewModel.getStrongBeers()
-//       viewModel.getLightBeers()
 
 
 
@@ -162,7 +180,19 @@ class Random_Beer_Fragment : Fragment() {
                 if (query != null) {
                     Log.d("nakli","called getFoodFromRetro")
 
+                    val isConnected = checkForInternet(requireContext())
+
+                    if(isConnected)
                     viewModel.getFoodFromRetro(query)
+                    else{
+                        AlertDialog.Builder(activity)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Internet Connection Alert")
+                            .setMessage("No Internet Connection")
+                            .setPositiveButton(
+                                "Close"
+                            ) { dialog, which -> dialog.cancel() }.show()
+                    }
 
                 }else if(query == null){
 
@@ -248,6 +278,45 @@ class Random_Beer_Fragment : Fragment() {
 
 
 
+    }
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
     }
 
 

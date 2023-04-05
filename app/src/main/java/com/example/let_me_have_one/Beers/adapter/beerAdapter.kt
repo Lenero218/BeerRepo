@@ -25,10 +25,12 @@ import com.example.let_me_have_one.R
 import com.example.let_me_have_one.databinding.CardViewBinding
 
 
-class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Context) : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
+class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : RecyclerView.Adapter<beerAdapter.BeerViewHolder>() {
 
     lateinit var binding : CardViewBinding
     var context = context
+    private val beerListViewModel = beerListViewModel
+
 
     inner class BeerViewHolder(itemView: CardViewBinding) : ViewHolder(binding.root){
         val title = itemView.title
@@ -68,13 +70,14 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
     override fun onBindViewHolder(holder: BeerViewHolder, @SuppressLint("RecyclerView") position: Int) {
 
         var model = differ.currentList[position]
-        var isFav = model.isFavorite
-        holder.favBtn.clearAnimation()
+
+
 
         holder.itemView.apply {
 
             Glide.with(this)
                 .load(model.image_url)
+                .placeholder(R.drawable.beer)
                 .into(binding.beerImage)
 
 
@@ -89,8 +92,6 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
                 onItemClickListener?.let{
                     it(model)
                 }
-
-
 
 
 
@@ -110,7 +111,7 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
                 .setPositiveButton(
                     "OK",
                     DialogInterface.OnClickListener { dialog, which -> dialog.cancel() })
-                .setTitle("About me!")
+                .setTitle("${model.name}!")
                 .setIcon(R.drawable.beer)
 
                 .show()
@@ -122,11 +123,14 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
 
 
         holder.favBtn.setOnClickListener({
-
-            if(!isFav)
+            model.isFavorite = !model.isFavorite
+            if(model.isFavorite)
             {
-                isFav = true
+
+
+                Log.d("check map","Value with name ${model.name} is entered into map")
                 Toast.makeText( it.context,"Added to Favorites",Toast.LENGTH_SHORT).show()
+                holder.favBtn.setImageResource(R.drawable.baseline_favorite_24)
 
                 //   holder.favBtn.setImageResource(R.drawable.baseline_favorite_24)
                 Glide.with(it).asBitmap().load(model.image_url)
@@ -137,7 +141,7 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
                         ) {
                             beerListViewModel.insertBeer(
                                 model(model.pk,resource,model.name,model.tagline,model.abv,
-                                    model.description,model.food_pairing,model.brewers_tips,model.amount,false,favorite = true,model.rating, 0,model.amount,model.no_of_reviews)
+                                    model.description,model.food_pairing,model.brewers_tips,model.amount,false,favorite = true,model.rating, model.currentOffer,model.amount,model.no_of_reviews)
                             )
                             Log.d("favorite","Inserted into Room db as favorite with ${position}")
                             beerListViewModel.getAllForFavorite(true)
@@ -148,13 +152,20 @@ class beerAdapter(private val beerListViewModel: BeerListViewModel, context: Con
 
                     })
 
-                notifyDataSetChanged()
+
             }else{
+
+                Log.d("check map","Setting the value as false to ${model.name}")
+
+
                 holder.favBtn.setImageResource(R.drawable.baseline_favorite_border_24)
                 Toast.makeText( it.context,"Removed from Favorites",Toast.LENGTH_SHORT).show()
                 //Write a query to remove from database
-                notifyDataSetChanged()
+
+
             }
+
+            notifyDataSetChanged()
 
         }
         )

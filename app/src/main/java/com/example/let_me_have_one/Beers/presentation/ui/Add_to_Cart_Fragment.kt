@@ -53,16 +53,7 @@ class Add_to_Cart_Fragment : Fragment() {
         addToCartbeerAdapter.notifyDataSetChanged()
         binding.addToCartRecyclerView.scrollToPosition(addToCartbeerAdapter.itemCount-1)
 
-        addToCartbeerAdapter.setOnItemClickListener {
-            val bundle= Bundle().apply{
-                putSerializable("beerModelFromDb",it)
-            }
 
-            findNavController().navigate(
-                R.id.action_add_to_Cart_Fragment_to_payment_Fragment,
-                bundle
-            )
-        }
 
 
         // Getting the values back from Room
@@ -126,7 +117,7 @@ class Add_to_Cart_Fragment : Fragment() {
         binding.addToCartRecyclerView.apply {
 
             layoutManager = LinearLayoutManager(requireContext())
-            addToCartbeerAdapter = addToCartAdapter()
+            addToCartbeerAdapter = addToCartAdapter(viewModel)
             adapter=addToCartbeerAdapter
 
 

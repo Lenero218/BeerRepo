@@ -82,5 +82,9 @@ class Beer_Repository_Impl @Inject constructor(
         return mapper.ToDomainList(result)
     }
 
+    override suspend fun deleteBeer(name: String, fav: Boolean, cart: Boolean) {
+        beerDao.deleteBeer(name)
+    }
+
 
 }

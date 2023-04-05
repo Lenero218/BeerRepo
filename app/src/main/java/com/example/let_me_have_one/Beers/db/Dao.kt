@@ -24,8 +24,11 @@ interface Dao  {
     @Query("Select * from cached_table WHERE addToCart = :bool AND favorite != :bool ")
     fun getAllBeerUsingCheck(bool : Boolean) : List<model>
 
-    @Query("Select DISTINCT * from cached_table Where favorite = :bool")
+    @Query("Select DISTINCT * from cached_table Where favorite = :bool AND addToCart != :bool")
     fun getAllBeerForFavorite(bool:Boolean) : List<model>
+
+    @Query("DELETE from cached_table WHERE name = :name ")
+    fun deleteBeer(name : String)
 
 
 

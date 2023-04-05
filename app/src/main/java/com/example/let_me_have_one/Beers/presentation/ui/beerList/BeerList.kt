@@ -1,15 +1,22 @@
 package com.example.let_me_have_one.Beers.presentation.ui.beerList
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.SearchView
+import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,11 +25,8 @@ import com.example.let_me_have_one.Beers.Network.LiveDataInternetConnection
 import com.example.let_me_have_one.Beers.adapter.beerAdapter
 import com.example.let_me_have_one.Beers.other.Constants.QUERY_PAGE_SIZE
 import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
-
 import com.example.let_me_have_one.R
-
 import com.example.let_me_have_one.databinding.FragmentBeerListBinding
-
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,6 +37,7 @@ class BeerList : Fragment() {
     val viewModel: BeerListViewModel by viewModels()
     private lateinit var beerAdapter: beerAdapter
     private lateinit var cld : LiveDataInternetConnection
+    private var layoutManagerState: Parcelable? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +53,7 @@ class BeerList : Fragment() {
         // return inflater.inflate(R.layout.fragment_beer_list, container, false)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_beer_list, container, false)
-
+        cld = activity?.let { LiveDataInternetConnection(requireActivity().application) }!!
         return binding.root
 
     }
@@ -72,7 +77,34 @@ class BeerList : Fragment() {
 
 
         var snackStop : Boolean = false
-        cld = activity?.let { LiveDataInternetConnection(it.application) }!!
+
+
+        var isConnectedToInternet = context?.let { checkForInternet(it.applicationContext) }
+
+        if(!isConnectedToInternet!!){
+            AlertDialog.Builder(activity)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Internet Connection Alert")
+                .setMessage("Please Check Your Internet Connection")
+                .setPositiveButton(
+                    "Close"
+                ) { dialog, which -> dialog.cancel() }.show()
+
+            val snackbar = Snackbar.make(view,"No Internet Connection",Snackbar.LENGTH_INDEFINITE).setAction("Go Offline",{
+                findNavController().navigate(R.id.action_beerList_to_favoriteBeer)
+            })
+
+            val snackBarView = snackbar.view
+            snackBarView.setBackgroundColor(Color.DKGRAY)
+            snackbar.show()
+
+        }else{
+
+            viewModel.getFromRetrofit()
+
+        }
+
+
 
         cld.observe(viewLifecycleOwner,{isConnected->
             if(isConnected){
@@ -86,9 +118,10 @@ class BeerList : Fragment() {
                     snackBarView.setBackgroundColor(Color.DKGRAY)
                     snackbar.show()
                     snackStop = false
+                    viewModel.getFromRetrofit()
                 }
 
-                viewModel.getFromRetrofit()
+
 
             }else{
 
@@ -106,6 +139,9 @@ class BeerList : Fragment() {
 
             }
         })
+
+
+
 
 
 
@@ -139,7 +175,21 @@ class BeerList : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
 
+                    var connected = checkForInternet(activity!!)
+
+                    if(connected)
                     viewModel.searchWithQuery(query)
+                    else
+                    {
+                        AlertDialog.Builder(activity)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Internet Connection Alert")
+                            .setMessage("Please Check Your Internet Connection")
+                            .setPositiveButton(
+                                "Close"
+                            ) { dialog, which -> dialog.cancel()  }.show()
+
+                    }
 
                 }else if(query == null){
                     viewModel.getFromRetrofit()
@@ -185,10 +235,51 @@ class BeerList : Fragment() {
         }
     }
 
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
+
     private fun setupRecyclerView() = binding.recyclerView.apply {
         beerAdapter = activity?.let { beerAdapter(viewModel, it) }!!
         adapter = beerAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+        layoutManager = LinearLayoutManager(requireContext().applicationContext)
         addOnScrollListener(this@BeerList.scrollListener)
 
 
@@ -235,6 +326,7 @@ class BeerList : Fragment() {
 
         }
     }
+
 
 
 }

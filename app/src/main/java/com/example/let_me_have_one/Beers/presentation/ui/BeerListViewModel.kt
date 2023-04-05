@@ -52,6 +52,18 @@ private val Repository : BeerRepository
 
 
 
+    fun delete(name : String, fav : Boolean, cart : Boolean){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            Repository.deleteBeer(name,fav,cart)
+
+        }
+
+        getAllBeerForCart(true)
+
+    }
+
 
     fun getFromRetrofit(){
                viewModelScope.launch(Dispatchers.IO) {
@@ -60,7 +72,7 @@ private val Repository : BeerRepository
 
                 MainScope().launch {
                     _loading.value = true
-                    delay(1200)
+
                     Repository.searchPage(page).also{
                         it.let{
                          //  delay(2200)
@@ -330,7 +342,7 @@ private val Repository : BeerRepository
         viewModelScope.launch {
 
             MainScope().launch {
-                _loading.value = true
+
 
                 Repository.getLightBeer(2,5).also {
 
@@ -345,7 +357,7 @@ private val Repository : BeerRepository
                     }
                 }
 
-                _loading.value = false
+
             }
         }
 
@@ -356,7 +368,7 @@ private val Repository : BeerRepository
         viewModelScope.launch {
 
             MainScope().launch {
-                _loading.value = true
+
 
 
 
@@ -374,7 +386,7 @@ private val Repository : BeerRepository
                     }
                 }
 
-                _loading.value = false
+
             }
         }
 
@@ -385,7 +397,7 @@ private val Repository : BeerRepository
         viewModelScope.launch {
 
             MainScope().launch {
-                _loading.value = true
+
 
                 Repository.getLightBeer(5,7).also {
 
@@ -401,7 +413,7 @@ private val Repository : BeerRepository
                     }
                 }
 
-                _loading.value = false
+
             }
         }
 

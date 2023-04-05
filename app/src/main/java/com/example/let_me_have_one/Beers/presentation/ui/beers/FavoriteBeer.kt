@@ -93,6 +93,8 @@ class FavoriteBeer : Fragment() {
         })
 
 
+
+
     }
 
 
@@ -102,7 +104,7 @@ class FavoriteBeer : Fragment() {
     private fun setupRecyclerView() {
         binding.favoriteBeerRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            favBeerAdapter = favoriteAdapter()
+            favBeerAdapter = favoriteAdapter(viewModel)
             adapter = favBeerAdapter
         }
     }
