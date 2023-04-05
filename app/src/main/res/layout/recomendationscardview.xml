@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
+            app:cardElevation="2dp"
+            app:cardCornerRadius="20dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/recomendedImg"
+                    android:layout_weight="0.7"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp">
+
+                </ImageView>
+
+                <LinearLayout
+                    android:layout_weight="1.5"
+                    android:layout_width="0dp"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:id="@+id/recomendedName"
+                            android:text="Recomendation Name"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_marginTop="3dp"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+
+
+                    </LinearLayout>
+
+
+
+
+                    <TextView
+                        android:id="@+id/recomendedTagline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tagline"
+                        android:layout_marginTop="8dp"
+                        android:textSize="14dp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/recomendedAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="5dp"
+                        android:textSize="16dp"
+                        android:text="Amount"
+                        android:layout_marginRight="20dp"
+                        android:textColor="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:background="@drawable/card_view_background"
+                            android:backgroundTint="@color/blue"
+                            android:layout_marginLeft="30dp"
+                            android:orientation="horizontal"
+                            android:layout_height="match_parent">
+
+
+                            <TextView
+                                android:id="@+id/recomendedRating"
+                                android:text="Rating"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"
+                                android:textSize="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent" />
+
+                            <ImageView
+                                android:layout_marginLeft="5dp"
+                                android:src="@drawable/star"
+                                android:layout_width="20dp"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:background="@drawable/discountbackground"
+                            android:backgroundTint="@color/orange"
+                            android:layout_marginTop="5dp"
+                            android:layout_width="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="right"
+                            android:layout_marginLeft="50dp"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:src="@drawable/discount"
+                                android:layout_marginLeft="5dp"
+                                android:layout_width="20dp"
+                                android:layout_gravity="center"
+                                android:layout_height="20dp" />
+
+                            <TextView
+                                android:id="@+id/recomendedOffer"
+                                android:layout_width="30dp"
+                                android:text="30"
+                                android:layout_marginLeft="5dp"
+                                android:textSize="20dp"
+                                android:textColor="@color/black"
+                                android:layout_gravity="center"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:textColor="@color/black"
+                                android:layout_gravity="center"
+                                android:textSize="20dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:text="%Off" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

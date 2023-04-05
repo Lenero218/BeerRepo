@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+  <data>
+
+  </data>
+
+  <ScrollView
+      android:overScrollMode="never"
+      android:scrollbars="none"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:context=".Authentication.SendOtpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+      <ImageView
+          android:layout_width="130dp"
+          android:layout_height="130dp"
+          android:layout_marginTop="80dp"
+          android:contentDescription="@string/app_name"
+          android:src="@drawable/paper_plane" />
+
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="30dp"
+          android:text="Otp Verfication"
+          android:textColor="@color/colorTextPrimary"
+          android:textSize="20sp"
+          android:textStyle="bold" />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="50dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginEnd="50dp"
+          android:gravity="center"
+          android:text="We will send you an One time Password on this mobile number"
+          android:textColor="@color/colorTextSecondary"
+          android:textSize="14sp" />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="30dp"
+          android:layout_marginEnd="30dp"
+          android:gravity="center"
+          android:layout_marginTop="50dp"
+          android:text="Enter mobile number"
+          android:textColor="@color/colorTextSecondary"
+          android:textSize="14sp" />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="60dp"
+          android:layout_marginEnd="60dp"
+          android:gravity="center"
+          android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="+91"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/inputMobileNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@null"
+            android:hint="-1234567890"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+      </LinearLayout>
+
+      <View
+          android:layout_width="match_parent"
+          android:layout_height="2dp"
+          android:layout_marginStart="70dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginEnd="70dp"
+          android:background="@color/colorDivider" />
+
+      <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/buttonGetOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:background="@drawable/background_button"
+            android:text="Get Otp"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+      
+        <ProgressBar
+          android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+          android:layout_gravity="center"
+          android:visibility="gone"/>
+
+      </FrameLayout>
+
+
+
+    </LinearLayout>
+
+  </ScrollView>
+</layout>
