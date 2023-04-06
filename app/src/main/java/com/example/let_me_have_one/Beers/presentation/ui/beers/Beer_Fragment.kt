@@ -136,8 +136,8 @@ class Beer_Fragment : Fragment() {
                          transition: Transition<in Bitmap?>?
                      ) {
                          viewModel.insertBeer(model(modelRetro.pk,resource,modelRetro.name,modelRetro.tagline,modelRetro.abv,
-                             modelRetro.description,modelRetro.food_pairing,modelRetro.brewers_tips,modelRetro.amount,true,modelRetro.isFavorite,modelRetro.rating,modelRetro.currentOffer,amountAfterDiscount,modelRetro.no_of_reviews))
-                         Log.d("favorite","Added to cart into Room db as favorite ")
+                             modelRetro.description,modelRetro.food_pairing,modelRetro.brewers_tips,modelRetro.amount,true,false,modelRetro.rating,modelRetro.currentOffer,amountAfterDiscount,modelRetro.no_of_reviews))
+                         Log.d("favorite","Added to cart with offer of ${modelRetro.currentOffer} ")
                      }
 
                      override fun onLoadCleared(placeholder: Drawable?) {

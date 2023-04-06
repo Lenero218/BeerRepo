@@ -74,7 +74,9 @@ class addToCartAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<add
 
             binding.deleteButton.setOnClickListener {
                 model.name?.let { it1 -> viewModel.delete(it1,false,true) }
-                notifyItemRemoved(position)
+
+
+
             }
 
 

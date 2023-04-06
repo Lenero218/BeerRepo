@@ -222,7 +222,7 @@ class Random_Beer_Fragment : Fragment() {
     private fun setupStrongBeersRecyclerView() {
        strongRView = binding.StrongBeerRv
 
-        adapterStrongBeer = randomAdapter()
+        adapterStrongBeer = randomAdapter(viewModel,requireContext())
         strongRView.adapter = adapterStrongBeer
         strongRView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
@@ -231,7 +231,7 @@ class Random_Beer_Fragment : Fragment() {
     private fun setupMediumBeersRecyclerView() {
         mediumRView = binding.mediumBeerRv
 
-        adapterMediumBeer = randomAdapter()
+        adapterMediumBeer = randomAdapter(viewModel,requireContext())
         mediumRView.adapter = adapterMediumBeer
         mediumRView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
@@ -259,7 +259,7 @@ class Random_Beer_Fragment : Fragment() {
 
     private fun setupLightBeersRecyclerView() {
         lightRView = binding.lightBeerRv
-        adapterLightBeer = randomAdapter()
+        adapterLightBeer = randomAdapter(viewModel,requireContext())
         lightRView.adapter = adapterLightBeer
         lightRView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
     }
@@ -269,7 +269,7 @@ class Random_Beer_Fragment : Fragment() {
 
         foodRView = binding.foodRv
 
-        adapterSearch = randomAdapter()
+        adapterSearch = randomAdapter(viewModel,requireContext())
         foodRView.layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
 
         foodRView.adapter = adapterSearch

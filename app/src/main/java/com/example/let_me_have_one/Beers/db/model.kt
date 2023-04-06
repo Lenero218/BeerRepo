@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
 )
 data class model(
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     var id : Int? = null,
 
     var image: Bitmap? = null,
@@ -34,8 +34,8 @@ data class model(
     @ColumnInfo(name="rating",defaultValue = "0.0")
     var rating : Double,
 
-    @ColumnInfo(name = "currentOffer", defaultValue = "0")
-    var currentOffer:Int,
+    @ColumnInfo(name = "currentOffer")
+    var currentOffer:Int?=null,
 
     @ColumnInfo(name="finalAmount",defaultValue="0")
     var finalAmount:Int,

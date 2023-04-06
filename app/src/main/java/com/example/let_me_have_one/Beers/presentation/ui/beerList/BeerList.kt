@@ -100,8 +100,10 @@ class BeerList : Fragment() {
 
         }else{
 
-            viewModel.getFromRetrofit()
-
+           if(viewModel.cpage==1)
+           viewModel.get(viewModel.cpage)
+            else
+            viewModel.get(viewModel.cpage-1)
         }
 
 
@@ -192,7 +194,7 @@ class BeerList : Fragment() {
                     }
 
                 }else if(query == null){
-                    viewModel.getFromRetrofit()
+                    //viewModel.get()
                 }
                 return false
             }
@@ -200,11 +202,11 @@ class BeerList : Fragment() {
             override fun onQueryTextChange(newQuery: String?): Boolean {
                 Log.d("adapter", "Adapter called from search view")
                 if (newQuery != null) {
-                    val newQuery = "%${newQuery}%"
-                    viewModel.getBeerByName(newQuery)
+//                    val newQuery = "%${newQuery}%"
+//                    viewModel.searchWithQuery(newQuery)
 
                 }else if(newQuery == null){
-                    viewModel.getFromRoom()
+                      viewModel.get(viewModel.cpage)
                 }
                 return false
             }

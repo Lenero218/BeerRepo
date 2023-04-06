@@ -71,6 +71,7 @@ class favoriteAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<favo
 
             binding.delete.setOnClickListener {
                 model.name?.let { it1 -> viewModel.delete(it1,true,false) }
+
             }
 
 

@@ -6,9 +6,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 
-@Database(entities = [model::class], version = 7,
+@Database(entities = [model::class], version = 10,
     autoMigrations = [
-        AutoMigration(from = 6, to = 7)
+        AutoMigration(from = 9, to = 10)
     ]
     )
 

@@ -94,6 +94,10 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
                 }
 
 
+                    holder.favBtn.setImageResource(R.drawable.baseline_favorite_border_24)
+
+
+
 
             }
         }
@@ -122,7 +126,11 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
 
 
 
-        holder.favBtn.setOnClickListener({
+
+        holder.favBtn.setOnClickListener{
+
+
+
             model.isFavorite = !model.isFavorite
             if(model.isFavorite)
             {
@@ -139,12 +147,13 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
                             resource: Bitmap,
                             transition: Transition<in Bitmap?>?
                         ) {
+
                             beerListViewModel.insertBeer(
                                 model(model.pk,resource,model.name,model.tagline,model.abv,
-                                    model.description,model.food_pairing,model.brewers_tips,model.amount,false,favorite = true,model.rating, model.currentOffer,model.amount,model.no_of_reviews)
+                                    model.description,model.food_pairing,model.brewers_tips,model.amount,false, true,model.rating, currentOffer = 0,model.amount,model.no_of_reviews)
                             )
                             Log.d("favorite","Inserted into Room db as favorite with ${position}")
-                            beerListViewModel.getAllForFavorite(true)
+
                         }
                         override fun onLoadCleared(placeholder: Drawable?) {
                             //
@@ -162,13 +171,15 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
                 Toast.makeText( it.context,"Removed from Favorites",Toast.LENGTH_SHORT).show()
                 //Write a query to remove from database
 
+                beerListViewModel.delete(model.name!!,false,false)
+
 
             }
 
-            notifyDataSetChanged()
+            //notifyDataSetChanged()
 
         }
-        )
+
 
 
     }

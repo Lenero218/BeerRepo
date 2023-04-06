@@ -35,7 +35,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.55"
                         android:layout_height="0dp">
 
                         <LinearLayout
@@ -67,7 +67,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:layout_height="0dp"
 
-                                android:textSize="20dp"
+                                android:textSize="24dp"
                                 android:text="Order title"
                                 android:textStyle="bold"
                                 android:textColor="@color/black"
@@ -85,12 +85,12 @@
                         android:id="@+id/tagline"
                         android:layout_width="match_parent"
                         android:text="Tagline"
-                        android:textStyle="bold"
+                        android:textStyle="italic"
                         android:textSize="18dp"
                         android:gravity="center"
                         android:textColor="@color/black"
                         android:layout_height="0dp"
-                        android:layout_weight="0.07" />
+                        android:layout_weight="0.13" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

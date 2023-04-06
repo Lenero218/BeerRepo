@@ -48,7 +48,7 @@ class FavoriteBeer : Fragment() {
 
         setupRecyclerView()
 
-       viewModel.getAllForFavorite(true)
+       viewModel.getAllForFavorite()
 
         viewModel.getBeerByName.observe(viewLifecycleOwner,{
 
@@ -57,10 +57,16 @@ class FavoriteBeer : Fragment() {
 
         })
 
+        viewModel.syncCheck.observe(viewLifecycleOwner,{
+
+            viewModel.getAllForFavorite()
+
+        })
+
         viewModel.getBeerForFavorite.observe(viewLifecycleOwner,{
             //provide value to the adapter
             favBeerAdapter.submitList(it)
-            binding.favoriteBeerRecyclerView.adapter?.notifyDataSetChanged()
+
         })
 
 
@@ -69,23 +75,23 @@ class FavoriteBeer : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     val newQuery = "%${query}%"
-                    viewModel.getBeerByName(newQuery)
+                    viewModel.getBeerByNameForFavorite(newQuery)
 
 
                 }else if(query == null){
-                    viewModel.getAllForFavorite(true)
+                    viewModel.getAllForFavorite()
                 }
                 return false
             }
 
             override fun onQueryTextChange(newQuery: String?): Boolean {
-                Log.d("adapter", "Adapter called from search view")
+
                 if (newQuery != null) {
                     val newQuery = "%${newQuery}%"
-                    viewModel.getBeerByName(newQuery)
+                    viewModel.getBeerByNameForFavorite(newQuery)
 
                 }else if(newQuery == null){
-                    viewModel.getAllForFavorite(true)
+                    viewModel.getAllForFavorite()
                 }
                 return false
             }

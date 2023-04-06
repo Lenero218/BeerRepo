@@ -9,23 +9,25 @@ interface BeerRepository {
 
 suspend fun search (query : String) : List<BeerModel>
 
-suspend fun get() : List<BeerModel>
+suspend fun get(page : Int) : List<BeerModel>
 
 suspend fun insertIntoRoom(beer : model)
 
-fun getFromDb() : LiveData<List<model>>
+
 
 fun isEmpty() : LiveData<Int>
 
-fun getBeerWithName(name : String) :List<model>
+fun getBeerWithNameForCart(name : String) :List<model>
 
 suspend fun searchPage(page:Int) : List<BeerModel>
 
-suspend fun getAllBeerForCart(bool:Boolean) : List<model>
+suspend fun getAllBeerForCart() : List<model>
 
-suspend fun getAllBeerForFavorite(bool:Boolean) : List<model>
+suspend fun getAllBeerForFavorite() : List<model>
 
 suspend fun getAllBeerForFood(name:String) : List<BeerModel>
+
+suspend fun getAllBeerForFavorite(name : String) : List<model>
 
 suspend fun getLightBeer(min:Int, max : Int) : List<BeerModel>
 

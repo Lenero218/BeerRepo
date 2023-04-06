@@ -1,6 +1,9 @@
 package com.example.let_me_have_one.Beers.presentation.ui
 
-import android.util.Log
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +13,7 @@ import com.example.let_me_have_one.Beers.db.model
 import com.example.let_me_have_one.Beers.repository.BeerRepository
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.random.Random
@@ -19,6 +23,7 @@ import kotlin.random.Random
 class BeerListViewModel
 @Inject
     constructor(
+ @ApplicationContext private val context: Context,
 private val Repository : BeerRepository
 ) : ViewModel() {
 
@@ -28,11 +33,13 @@ private val Repository : BeerRepository
     val query : LiveData<String> get() = _query
     val _loading : MutableLiveData<Boolean> = MutableLiveData()
     val loading: LiveData<Boolean> get() = _loading
-    var page : Int = 1
+    var page : Int = 0
+    var cpage : Int = 1
+    val syncCheck : MutableLiveData<Boolean> = MutableLiveData()
+
+    var isFavorite = false
 
 
-    var resultFromRoom : LiveData<List<model>>? = null
-//    var getBeerByName : LiveData<List<model>>? = null
     val getBeerByName : MutableLiveData<List<model>> = MutableLiveData(emptyList())
     val getBeerForCart : MutableLiveData<List<model>> = MutableLiveData(emptyList())
     val NoOfItems = Repository.isEmpty()
@@ -44,13 +51,74 @@ private val Repository : BeerRepository
 
     val getRecomendedBeers: MutableLiveData<List<BeerModel>> = MutableLiveData(emptyList())
 
+    var isConnectedToInternet = false
+    var isInitialized = false
+
+
 
     init{
-        getAllForFavorite(true)
-        getAllBeerForCart(true)
+
+         isConnectedToInternet = checkForInternet(context)
+
+        if(isConnectedToInternet)
+        {getFromRetrofit()}
+
     }
 
 
+
+    fun get(cpage : Int){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+                MainScope().launch {
+                    Repository.searchPage(cpage).also{
+
+                        it.let{
+
+                            for(i in 0..it.size-1){
+
+
+                                it[i].apply{
+                                    //adding random rating
+                                    rating = randRating(2,5)
+
+                                    //adding random offers
+                                    currentOffer = rand(20,45)
+
+                                    //adding random amount
+                                    amount = rand(400,1000)
+
+                                    //adding random reviews
+                                    no_of_reviews=  randReviews(22000,100000)
+                                }
+
+                            }
+
+                        }
+
+                        _beers.value=it
+
+
+
+
+                }
+
+            }
+        }
+
+    }
+
+
+    fun sync(){
+
+
+        if(syncCheck.value == false)
+            syncCheck.value = true
+        else
+            syncCheck.value = false
+    }
 
     fun delete(name : String, fav : Boolean, cart : Boolean){
 
@@ -58,9 +126,13 @@ private val Repository : BeerRepository
 
             Repository.deleteBeer(name,fav,cart)
 
+            MainScope().launch {
+                sync()
+            }
+
         }
 
-        getAllBeerForCart(true)
+
 
     }
 
@@ -68,16 +140,16 @@ private val Repository : BeerRepository
     fun getFromRetrofit(){
                viewModelScope.launch(Dispatchers.IO) {
 
-                Log.d("check","Calling the service get with page num ${page}")
+
 
                 MainScope().launch {
                     _loading.value = true
 
                     Repository.searchPage(page).also{
                         it.let{
-                         //  delay(2200)
 
-                            Log.d("check","Append beer called")
+
+
 
 
                             for(i in 0..it.size-1){
@@ -103,8 +175,12 @@ private val Repository : BeerRepository
                     }
                     _loading.value = false
                 }
+
+                if(page != 0)
+                    cpage = page
+
                 page = page + 1
-                Log.d("check","Got the results ")
+
 
             }
 
@@ -118,7 +194,7 @@ private val Repository : BeerRepository
 
             MainScope().launch {
                 _loading.value = true
-                Log.d("nakli","Called service class")
+
                 Repository.getAllBeerForFood(name).also {
 
 
@@ -132,11 +208,9 @@ private val Repository : BeerRepository
                         getBeerForFood.value = it
                     }
 
-//                    it.let {
-//                        getBeerForFood.value = v
-//                    }
+
                 }
-                Log.d("nakli","Got the result from VM")
+
                 _loading.value = false
             }
 
@@ -156,24 +230,38 @@ private val Repository : BeerRepository
         return min + Random.nextDouble() * (max - min)
     }
 
-    fun getFromRoom(){
 
-        _loading.value = true
-          resultFromRoom = Repository.getFromDb()
-        _loading.value = false
 
+
+
+    fun getBeerByNameForFavorite(name: String){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+                Repository.getAllBeerForFavorite(name).also{
+
+                    MainScope().launch {
+                        it.let{
+                            getBeerForFavorite.value = it
+                        }
+                    }
+
+
+                }
+
+
+        }
 
     }
 
+    fun getBeerByNameForCart(name: String){
 
-
-    fun getBeerByName(name: String){
-        Log.d("adapter","Entered in viewModel")
 
 
         CoroutineScope(Dispatchers.IO).launch {
 
-                    Repository.getBeerWithName(name).also{
+                    Repository.getBeerWithNameForCart(name).also{
 
                         MainScope().launch {
                                 it.let{v->
@@ -192,12 +280,15 @@ private val Repository : BeerRepository
 
 
 
-    fun getAllBeerForCart(bool : Boolean){
+    fun getAllBeerForCart(){
 
         CoroutineScope(Dispatchers.IO).launch {
-            Repository.getAllBeerForCart(bool).also{
+            Repository.getAllBeerForCart().also{
                 MainScope().launch {
                     it.let{v->
+
+
+
                         getBeerForCart.value = v
                     }
                 }
@@ -206,10 +297,10 @@ private val Repository : BeerRepository
 
     }
 
-    fun getAllForFavorite(bool : Boolean){
+    fun getAllForFavorite(){
 
        CoroutineScope(Dispatchers.IO).launch{
-            Repository.getAllBeerForFavorite(bool).also{
+            Repository.getAllBeerForFavorite().also{
                 MainScope().launch {
                     it.let{v->
                         getBeerForFavorite.value = v
@@ -237,6 +328,17 @@ private val Repository : BeerRepository
 
                    for( i in 0..it.size-1){
                        it[i].amount = rand(400,1000)
+
+                       it[i].rating = randRating(2,5)
+
+                       //adding random offers
+                       it[i].currentOffer = rand(20,45)
+
+
+
+                       //adding random reviews
+                       it[i].no_of_reviews=  randReviews(22000,100000)
+
                    }
 
                    it.let{v->
@@ -253,29 +355,28 @@ private val Repository : BeerRepository
     private fun appendBeers(recipes: List<BeerModel>, page:Int){
         var current : ArrayList<BeerModel>? = ArrayList(emptyList())
 
-        Log.d("check","Entered into append Beers with recipe size: ${recipes.size}")
+
 
         if(page > 2){
 
             _beers?.let{
-                Log.d("check","Added paginated list")
+
                 current = ArrayList(this._beers.value)
             }
 
         }
-         //I can change only the mutable type data not the non mutable live data
+
 
         recipes?.let{
-            Log.d("check","Trying to append Beers with recipe size: ${recipes.size}")
+
             current?.addAll(recipes)
-            Log.d("check","Merged list with previous list")
-            Log.d("check","After adding the current list size : ${current?.size}")
+
         }
 
-        Log.d("check","List size: ${current?.size}")
+
 
         current?.let{
-            Log.d("check","Adding into current recipe")
+
             MainScope().launch {
                 _beers.value = it
             }
@@ -302,7 +403,7 @@ private val Repository : BeerRepository
 
     fun getRecomendedBeers(min : Int, max : Int){
 
-        Log.d("recCheck", "Entered into viewModel and calling repository with min ${min} and max ${max}")
+
 
         viewModelScope.launch {
 
@@ -323,7 +424,7 @@ private val Repository : BeerRepository
                     }
 
                     it.let{
-                        Log.d("recCheck","Setting the observer with list of size ${it.size}")
+
                         getRecomendedBeers.value = it
                     }
 
@@ -344,7 +445,7 @@ private val Repository : BeerRepository
             MainScope().launch {
 
 
-                Repository.getLightBeer(2,5).also {
+                Repository.getLightBeer(2,3).also {
 
                     for(i in 0..it.size-1){
 
@@ -419,7 +520,44 @@ private val Repository : BeerRepository
 
     }
 
+    private fun checkForInternet(context: Context): Boolean {
 
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
 
 
 }

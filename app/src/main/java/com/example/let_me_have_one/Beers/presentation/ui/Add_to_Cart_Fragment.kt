@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.let_me_have_one.Beers.adapter.addToCartAdapter
 import com.example.let_me_have_one.R
@@ -48,10 +47,9 @@ class Add_to_Cart_Fragment : Fragment() {
 
         setupRecyclerView()
 
-        viewModel.getAllBeerForCart(true)
+        viewModel.getAllBeerForCart()
 
-        addToCartbeerAdapter.notifyDataSetChanged()
-        binding.addToCartRecyclerView.scrollToPosition(addToCartbeerAdapter.itemCount-1)
+
 
 
 
@@ -66,7 +64,7 @@ class Add_to_Cart_Fragment : Fragment() {
                 }
             }
 
-            binding.addToCartRecyclerView.adapter?.notifyDataSetChanged()
+
         })
 
         viewModel.getBeerByName.observe(viewLifecycleOwner,{dbBeer->
@@ -74,23 +72,29 @@ class Add_to_Cart_Fragment : Fragment() {
             dbBeer?.let{
                 addToCartbeerAdapter.submitList(it)
                 for (beer in it) {
-                    Log.d("Tag", "onViewCreated fetched data using Room : ${beer.tagLine}")
+                    Log.d("Tag", "onViewCreated fetched data using Room After search : ${beer.tagLine}")
                 }
             }
 
         })
 
 
+        viewModel.syncCheck.observe(viewLifecycleOwner,{
+
+            viewModel.getAllBeerForCart()
+
+        })
+
         binding.addToCartSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     val newQuery = "%${query}%"
-                    viewModel.getBeerByName(newQuery)
+                    viewModel.getBeerByNameForCart(newQuery)
 
 
                 }else if(query == null){
-                    viewModel.getAllBeerForCart(true)
+                    viewModel.getAllBeerForCart()
                 }
                 return false
             }
@@ -99,10 +103,10 @@ class Add_to_Cart_Fragment : Fragment() {
                 Log.d("adapter", "Adapter called from search view")
                 if (newQuery != null) {
                     val newQuery = "%${newQuery}%"
-                    viewModel.getBeerByName(newQuery)
+                    viewModel.getBeerByNameForCart(newQuery)
 
                 }else if(newQuery == null){
-                    viewModel.getAllBeerForCart(true)
+                    viewModel.getAllBeerForCart()
                 }
                 return false
             }
@@ -124,7 +128,7 @@ class Add_to_Cart_Fragment : Fragment() {
 
 
         }
-      //  binding.addToCartRecyclerView.layoutManager = reverseOrder<>()
+
 
     }
 
