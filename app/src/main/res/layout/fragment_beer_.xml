@@ -305,7 +305,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/Recomendations"
                             android:layout_marginTop="10dp"
-                            android:text="We got more!"
+                            android:text="Recommended!"
                             android:textColor="@color/black"
                             android:textSize="22dp"
 
