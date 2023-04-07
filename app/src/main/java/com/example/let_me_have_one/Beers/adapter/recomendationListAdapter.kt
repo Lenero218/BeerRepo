@@ -53,6 +53,11 @@ class recomendationListAdapter(beerListViewModel: BeerListViewModel, context : C
         return position
     }
 
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     fun submitList(list : List<BeerModel>) = differ.submitList(list)
 
 

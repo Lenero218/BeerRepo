@@ -9,7 +9,7 @@ import androidx.room.Query
 @androidx.room.Dao
 interface Dao  {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBeer(beer : model)
 
 //    @Query("Select DISTINCT * From cached_table ORDER BY id ASC")

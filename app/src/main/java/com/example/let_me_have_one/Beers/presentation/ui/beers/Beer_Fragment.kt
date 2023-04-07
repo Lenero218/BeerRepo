@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -32,6 +33,7 @@ import com.example.let_me_have_one.R
 import com.example.let_me_have_one.databinding.FragmentBeerBinding
 import com.example.let_me_have_one.Beers.db.model
 import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
+import com.google.android.material.snackbar.Snackbar
 
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,6 +97,44 @@ class Beer_Fragment : Fragment() {
             currentOffer.setText(modelRetro.currentOffer.toString())
             finalAmount.setText(amountAfterDiscount.toString())
         }
+
+        var snackStop : Boolean = false
+        cld.observe(viewLifecycleOwner,{isConnected->
+            if(isConnected){
+
+                if(snackStop){
+
+
+
+                    val snackbar = Snackbar.make(view,"Connected Succesfully", Snackbar.LENGTH_SHORT)
+                    val snackBarView = snackbar.view
+                    snackBarView.setBackgroundColor(Color.DKGRAY)
+                    snackbar.show()
+                    snackStop = false
+                }
+
+
+
+            }else{
+
+
+
+                val snackbar = Snackbar.make(view,"No Internet Connection", Snackbar.LENGTH_LONG).setAction("Go Offline",{
+                    findNavController().navigate(R.id.action_beer_Fragment_to_favoriteBeer)
+                })
+
+
+
+                val snackBarView = snackbar.view
+                snackBarView.setBackgroundColor(Color.DKGRAY)
+                snackbar.show()
+
+                snackStop = true
+
+            }
+        })
+
+
 
         Log.d("recCheck","Checking the abv value and it is found ${modelRetro.abv} and calling viewModel")
 
@@ -221,6 +261,8 @@ class Beer_Fragment : Fragment() {
             return networkInfo.isConnected
         }
     }
+
+
 
 
 }

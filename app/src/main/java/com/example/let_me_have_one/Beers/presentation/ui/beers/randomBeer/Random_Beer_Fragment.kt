@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.let_me_have_one.Beers.Network.LiveDataInternetConnection
@@ -128,8 +129,8 @@ class Random_Beer_Fragment : Fragment() {
 
 
 
-                val snackbar = Snackbar.make(view,"No Internet Connection", Snackbar.LENGTH_INDEFINITE).setAction("Go Offline",{
-                 //   findNavController().navigate(R.id.action_random_Beer_Fragment_to_favoriteBeer)
+                val snackbar = Snackbar.make(view,"No Internet Connection", Snackbar.LENGTH_LONG).setAction("Go Offline",{
+                    findNavController().navigate(R.id.action_random_Beer_Fragment_to_favoriteBeer)
                 })
 
 

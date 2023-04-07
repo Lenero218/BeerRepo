@@ -6,10 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +18,6 @@ import com.example.let_me_have_one.Beers.Network.models.BeerModel
 import com.example.let_me_have_one.Beers.db.model
 import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
 import com.example.let_me_have_one.R
-import com.example.let_me_have_one.databinding.FavoritecardviewBinding
 import com.example.let_me_have_one.databinding.RandomcardviewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -61,6 +58,11 @@ class randomAdapter(beerListViewModel: BeerListViewModel, context: Context) : Re
 
     override fun getItemViewType(position: Int): Int {
         return position
+    }
+
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
     }
 
     override fun getItemCount(): Int = differ.currentList.size
@@ -114,7 +116,7 @@ class randomAdapter(beerListViewModel: BeerListViewModel, context: Context) : Re
 
                 Toast.makeText(context,"Removed from Favorites",Toast.LENGTH_SHORT).show()
 
-                beerListViewModel.delete(beerModel.name!!,false,false)
+
 
             }
 

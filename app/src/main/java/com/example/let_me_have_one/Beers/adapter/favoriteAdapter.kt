@@ -21,6 +21,9 @@ class favoriteAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<favo
 
     inner class favViewHolder(itemView : FavoritecardviewBinding) : RecyclerView.ViewHolder(binding.root){
 
+
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): favViewHolder {
@@ -49,6 +52,11 @@ class favoriteAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<favo
         return position
     }
 
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
     fun submitList(list:List<model>){
        listm = list
         differ.submitList(listm)
@@ -69,15 +77,24 @@ class favoriteAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<favo
             binding.title.setText(model.name.toString())
             Glide.with(this).load(model.image).placeholder(R.drawable.beer) .into(binding.beerImage)
 
-            binding.delete.setOnClickListener {
-                model.name?.let { it1 -> viewModel.delete(it1,true,false) }
 
-            }
 
 
 
         }
 
+//        binding.delete.setOnClickListener {
+//            binding.delete.setOnClickListener {
+//                model.name?.let { it1 -> viewModel.delete(it1,true,false) }
+//                differ.currentList.toMutableList().removeAt(position)
+//
+//                submitList(differ.currentList)
+//
+////                notifyItemRemoved(position)
+//                notifyDataSetChanged()
+//
+//            }
+//        }
     }
 
 

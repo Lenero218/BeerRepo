@@ -33,10 +33,18 @@
             app:destination="@id/payment_Fragment" />
         <action
             android:id="@+id/action_random_Beer_Fragment_to_add_to_Cart_Fragment"
-            app:destination="@id/add_to_Cart_Fragment" />
+            app:destination="@id/add_to_Cart_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_random_Beer_Fragment_to_favoriteBeer"
-            app:destination="@id/favoriteBeer" />
+            app:destination="@id/favoriteBeer"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/beerList"
@@ -45,10 +53,19 @@
         tools:layout="@layout/fragment_add_to__cart_" >
         <action
             android:id="@+id/action_beerList_to_beer_Fragment"
-            app:destination="@id/beer_Fragment" />
+            app:destination="@id/beer_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
         <action
             android:id="@+id/action_beerList_to_favoriteBeer"
-            app:destination="@id/favoriteBeer" />
+            app:destination="@id/favoriteBeer"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/beer_Fragment"
@@ -56,7 +73,11 @@
         android:label="Beer_Fragment" >
         <action
             android:id="@+id/action_beer_Fragment_to_add_to_Cart_Fragment"
-            app:destination="@id/add_to_Cart_Fragment" />
+            app:destination="@id/add_to_Cart_Fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
 
         <action
             android:id="@+id/action_beer_Fragment_to_payment_Fragment"
@@ -69,6 +90,9 @@
         <argument
             android:name="beerModelFromRetro"
             app:argType="com.example.let_me_have_one.Beers.Network.models.BeerModel" />
+        <action
+            android:id="@+id/action_beer_Fragment_to_favoriteBeer"
+            app:destination="@id/favoriteBeer" />
     </fragment>
     <fragment
         android:id="@+id/favoriteBeer"

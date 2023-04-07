@@ -36,7 +36,7 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
         val title = itemView.title
         val favBtn = itemView.favorite
         val amount = itemView.amount
-            }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BeerViewHolder {
         binding = CardViewBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -45,11 +45,11 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
 
     val differCallBack = object :DiffUtil.ItemCallback<BeerModel>(){
         override fun areItemsTheSame(oldItem: BeerModel, newItem: BeerModel): Boolean {
-            return oldItem.image_url == newItem.image_url
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: BeerModel, newItem: BeerModel): Boolean {
-            return oldItem==newItem
+            return oldItem.hashCode()==newItem.hashCode()
         }
 
     }
@@ -60,6 +60,12 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
     override fun getItemViewType(position: Int): Int {
         return position
     }
+
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
 
     fun submitList(list : List<BeerModel>) = differ.submitList(list)
 
@@ -170,13 +176,13 @@ class beerAdapter( beerListViewModel: BeerListViewModel, context: Context) : Rec
                 holder.favBtn.setImageResource(R.drawable.baseline_favorite_border_24)
                 Toast.makeText( it.context,"Removed from Favorites",Toast.LENGTH_SHORT).show()
                 //Write a query to remove from database
-
-                beerListViewModel.delete(model.name!!,false,false)
+                val model = model(model.pk,null,model.name,model.tagline,model.abv,model.description,model.food_pairing,model.brewers_tips,model.amount,false,model.isFavorite,model.rating,model.currentOffer,0,model.no_of_reviews)
+                beerListViewModel.delete(model)
 
 
             }
 
-            //notifyDataSetChanged()
+
 
         }
 

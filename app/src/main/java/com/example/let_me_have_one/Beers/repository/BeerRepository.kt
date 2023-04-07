@@ -31,7 +31,7 @@ suspend fun getAllBeerForFavorite(name : String) : List<model>
 
 suspend fun getLightBeer(min:Int, max : Int) : List<BeerModel>
 
-suspend fun deleteBeer(name: String,fav:Boolean, card : Boolean)
+suspend fun deleteBeer(name: String)
 
 
 }

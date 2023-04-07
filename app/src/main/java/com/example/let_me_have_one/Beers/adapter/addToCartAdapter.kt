@@ -1,16 +1,13 @@
 package com.example.let_me_have_one.Beers.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
-import com.example.let_me_have_one.Beers.Network.models.BeerModel
 import com.example.let_me_have_one.Beers.db.model
 import com.example.let_me_have_one.Beers.presentation.ui.BeerListViewModel
 import com.example.let_me_have_one.R
@@ -25,6 +22,7 @@ class addToCartAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<add
     inner class atcViewHolder(itemView: AddtocartcartviewBinding) : ViewHolder(binding.root) {
 
         val buyButton = itemView.buyNow
+     //   val delete = binding.deleteButton
 
     }
 
@@ -36,11 +34,11 @@ class addToCartAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<add
 
     val differCallBack = object : DiffUtil.ItemCallback<model>() {
         override fun areItemsTheSame(oldItem: model, newItem: model): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.name == newItem.name
         }
 
         override fun areContentsTheSame(oldItem: model, newItem: model): Boolean {
-            return oldItem == newItem
+            return oldItem.hashCode() == newItem.hashCode()
         }
 
     }
@@ -72,12 +70,7 @@ class addToCartAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<add
                     Toast.makeText(context,"Payment Succesfull",Toast.LENGTH_SHORT).show()
             }
 
-            binding.deleteButton.setOnClickListener {
-                model.name?.let { it1 -> viewModel.delete(it1,false,true) }
 
-
-
-            }
 
 
 
@@ -90,6 +83,16 @@ class addToCartAdapter(viewModel : BeerListViewModel) : RecyclerView.Adapter<add
 
     override fun getItemViewType(position: Int): Int {
         return position
+    }
+
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    interface ModelClickDeleteInterface{
+
+        fun onDeleteIconClick(model : String)
     }
 
 

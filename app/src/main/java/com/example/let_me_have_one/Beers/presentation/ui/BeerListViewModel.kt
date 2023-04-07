@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -120,17 +121,19 @@ private val Repository : BeerRepository
             syncCheck.value = false
     }
 
-    fun delete(name : String, fav : Boolean, cart : Boolean){
+    fun delete(model: model){
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            Repository.deleteBeer(name,fav,cart)
+            model?.let { it.name?.let { it1 -> Repository.deleteBeer(it1) } }
 
-            MainScope().launch {
-                sync()
-            }
+//            MainScope().launch {
+//                sync()
+//            }
 
         }
+
+
 
 
 
@@ -287,6 +290,11 @@ private val Repository : BeerRepository
                 MainScope().launch {
                     it.let{v->
 
+                        for(i in 0..it.size-1){
+
+                            Log.d("fetchedData","${it[i].name}")
+
+                        }
 
 
                         getBeerForCart.value = v
@@ -447,9 +455,19 @@ private val Repository : BeerRepository
 
                 Repository.getLightBeer(2,3).also {
 
-                    for(i in 0..it.size-1){
+
+                    for( i in 0..it.size-1){
+                        it[i].amount = rand(400,1000)
 
                         it[i].rating = randRating(2,5)
+
+                        //adding random offers
+                        it[i].currentOffer = rand(20,45)
+
+
+
+                        //adding random reviews
+                        it[i].no_of_reviews=  randReviews(22000,100000)
 
                     }
 
@@ -476,9 +494,18 @@ private val Repository : BeerRepository
 
                 Repository.getLightBeer(3,5).also {
 
-                    for(i in 0..it.size-1){
+                    for( i in 0..it.size-1){
+                        it[i].amount = rand(400,1000)
 
                         it[i].rating = randRating(2,5)
+
+                        //adding random offers
+                        it[i].currentOffer = rand(20,45)
+
+
+
+                        //adding random reviews
+                        it[i].no_of_reviews=  randReviews(22000,100000)
 
                     }
 
@@ -502,9 +529,18 @@ private val Repository : BeerRepository
 
                 Repository.getLightBeer(5,7).also {
 
-                    for(i in 0..it.size-1){
+                    for( i in 0..it.size-1){
+                        it[i].amount = rand(400,1000)
 
                         it[i].rating = randRating(2,5)
+
+                        //adding random offers
+                        it[i].currentOffer = rand(20,45)
+
+
+
+                        //adding random reviews
+                        it[i].no_of_reviews=  randReviews(22000,100000)
 
                     }
 

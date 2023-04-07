@@ -66,15 +66,26 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/foodRv"
+                    android:layoutAnimation="@anim/layout_animation"
                     android:layout_marginTop="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="We have something for every mood!"
+                    android:textSize="22dp"
+                    android:textColor="@color/darkBlue"
+                    android:padding="5dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Light Beers!"
+                    android:text="Tipsy?!"
+                    android:gravity="center"
                     android:padding="5dp"
                     android:textColor="@color/black"
                     android:layout_marginTop="15dp"
@@ -84,6 +95,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lightBeerRv"
+                    android:layoutAnimation="@anim/layout_animation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
@@ -91,8 +103,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Medium Beers!"
+                    android:text="Let's Compete!"
+                    android:gravity="center"
                     android:padding="5dp"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/black"
                     android:layout_marginTop="15dp"
                     android:textStyle="bold"
@@ -100,6 +114,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/mediumBeerRv"
+                    android:layoutAnimation="@anim/layout_animation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp" />
@@ -107,8 +122,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Strong Beers!"
+                    android:text="Wanna feel Legless?!"
+                    android:gravity="center"
                     android:padding="5dp"
+                    android:layout_marginLeft="5dp"
                     android:textColor="@color/black"
                     android:layout_marginTop="15dp"
                     android:textStyle="bold"
@@ -117,6 +134,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/StrongBeerRv"
                     android:layout_marginTop="8dp"
+                    android:layoutAnimation="@anim/layout_animation"
                     android:layout_marginBottom="42dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
